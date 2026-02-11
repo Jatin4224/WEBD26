@@ -33,4 +33,24 @@
 ></motion.div>
 ```
 
-### 4 - Adding interactivity (Hover, focus and tap)
+### 4 - Adding interactivity (Hover, focus and tap -- making bouncy effect)
+
+```jsx
+<motion.button
+  className="h-16 rounded-full px-8 bg-blue-600"
+  whileHover={{
+    scale: 2,
+  }}
+  whileFocus={{
+    scale: 2.2,
+  }}
+  whileTap={{
+    scale: 1.7,
+  }}
+  //onTap
+  //onTapStart
+  //onTapCancel={asyncFunction}
+>
+  Hover
+</motion.button>
+```
