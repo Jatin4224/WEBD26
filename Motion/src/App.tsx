@@ -1,25 +1,16 @@
-import { motion } from "motion/react";
+import { motion, useMotionValue } from "motion/react";
 
 const App = () => {
+  const scale = useMotionValue(2);
+
   return (
     <div className="flex items-center justify-center min-h-screen text-white ">
-      <motion.button
-        className="h-16 rounded-full px-8 bg-blue-600"
-        whileHover={{
-          scale: 2,
+      <motion.div
+        className="rounded-full w-32 h-12 bg-blue-500"
+        style={{
+          scale,
         }}
-        whileFocus={{
-          scale: 2.2,
-        }}
-        whileTap={{
-          scale: 7,
-        }}
-        //onTap
-        //onTapStart
-        //onTapCancel={asyncFunction}
-      >
-        Hover
-      </motion.button>
+      ></motion.div>
     </div>
   );
 };

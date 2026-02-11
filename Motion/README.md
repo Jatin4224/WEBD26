@@ -1,4 +1,4 @@
-# part 1
+# part 1 - First steps
 
 ## 1 - starting point of the animation (animate prop & initial prop)
 
@@ -33,7 +33,7 @@
 ></motion.div>
 ```
 
-### 4 - Adding interactivity (Hover, focus and tap -- making bouncy effect)
+## 4 - Adding interactivity (Hover, focus and tap -- making bouncy effect)
 
 ```jsx
 <motion.button
@@ -53,4 +53,35 @@
 >
   Hover
 </motion.button>
+```
+
+# par 2 - Motion values
+
+## 1 - The core of motion
+
+### useMotionValue hook - used to create our own custom motion values
+
+-important note:- when creating own custom motion value. motion expects u to use style property instead of animate and initial property.
+
+- set and get function can be used to manipulate the value
+
+```jsx (example 1)
+import { motion, useMotionValue } from "motion/react";
+
+const App = () => {
+  const scale = useMotionValue(2);
+  //scale.set scale.get
+  return (
+    <div className="flex items-center justify-center min-h-screen text-white ">
+      <motion.div
+        className="rounded-full w-32 h-12 bg-blue-500"
+        style={{
+          scale,
+        }}
+      ></motion.div>
+    </div>
+  );
+};
+
+export default App;
 ```
