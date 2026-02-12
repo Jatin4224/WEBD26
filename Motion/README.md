@@ -84,29 +84,63 @@ const App = () => {
 export default App;
 ```
 
-## 2 - Make it bounce
+## 2 - Make it bounce like a spring
 
 ### useSpring hook
 
 ```jsx
-import { motion, useSpring } from "motion/react";
-import { useEffect } from "react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 
 const App = () => {
-  const scale = useSpring(10, {
+  const scale = useSpring(1, {
     stiffness: 200,
-    mass: 1,
+    damping: 20,
+    mass: 0.5,
+    velocity: 0,
   });
+  //scale.set scale.get
+  return (
+    <div className="flex items-center justify-center min-h-screen text-white ">
+      <motion.div
+        className="rounded-full w-32 h-12 bg-blue-500"
+        style={{
+          scale,
+        }}
+        whileHover={{
+          scale: 2,
+        }}
+      ></motion.div>
+    </div>
+  );
+};
 
-  useEffect(() => {
-    scale.set(1); // 🔥 THIS triggers animation
-  });
+export default App;
+```
+
+## 3 - Transforming motion values
+
+### useTransform hook
+
+- This example demonstrates how useTransform in Framer Motion creates derived animations from a single source value. Here, sliderValue is a MotionValue that acts as the main driver of the animation. When the user hovers over the element, sliderValue changes from 1 to 5.
+- The useTransform hook listens to this change and maps the input range [1, 5] to an output range [0.2, 1], producing a new motion value called opacity. As a result, the element smoothly fades in as the hover begins and fades out when the hover ends. This pattern highlights the core idea behind useTransform: instead of animating multiple properties independently, you animate a single source value and derive multiple visual effects from it, leading to cleaner, more predictable, and more scalable animations.
+
+```jsx
+import { motion, useMotionValue, useTransform } from "motion/react";
+
+const App = () => {
+  // source value
+  const sliderValue = useMotionValue(1);
+
+  // derived value
+  const opacity = useTransform(sliderValue, [1, 5], [0.2, 1]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <motion.div
         className="rounded-full w-32 h-12 bg-blue-500"
-        style={{ scale }}
+        style={{ opacity }}
+        onHoverStart={() => sliderValue.set(5)}
+        onHoverEnd={() => sliderValue.set(1)}
       />
     </div>
   );
