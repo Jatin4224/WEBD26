@@ -12,8 +12,6 @@
 
 - inline stype always wins for any css selector esxpect !important so never use ! in your styles because it will break all the animations.
 
-### tailwindcs
-
 ## 3 - Making the animation loop with keyFrames
 
 ```jsx
@@ -61,11 +59,11 @@
 
 ### useMotionValue hook - used to create our own custom motion values
 
--important note:- when creating own custom motion value. motion expects u to use style property instead of animate and initial property.
+- important note:- when creating own custom motion value. motion expects u to use style property instead of animate and initial property.
 
 - set and get function can be used to manipulate the value
 
-```jsx (example 1)
+```jsx
 import { motion, useMotionValue } from "motion/react";
 
 const App = () => {
@@ -79,6 +77,37 @@ const App = () => {
           scale,
         }}
       ></motion.div>
+    </div>
+  );
+};
+
+export default App;
+```
+
+## 2 - Make it bounce
+
+### useSpring hook
+
+```jsx
+import { motion, useSpring } from "motion/react";
+import { useEffect } from "react";
+
+const App = () => {
+  const scale = useSpring(10, {
+    stiffness: 200,
+    mass: 1,
+  });
+
+  useEffect(() => {
+    scale.set(1); // 🔥 THIS triggers animation
+  });
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <motion.div
+        className="rounded-full w-32 h-12 bg-blue-500"
+        style={{ scale }}
+      />
     </div>
   );
 };
