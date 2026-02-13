@@ -217,3 +217,50 @@ const App = () => {
 
 export default App;
 ```
+
+## 5 - Animating CSS variables (custom properties)
+
+### css variables
+
+- CSS Variables (or CSS Custom Properties would be the correct name), are a way to define variables in CSS. You can then use these variables in your CSS, and change them with JavaScript. Mozilla Developer Docs does a very good job on describing them in detail. Or take a look at a video of me, using CSS variables to make a gradient follow the cursor.
+
+```css
+:root {
+  --header-size: 60px;
+}
+
+main {
+  padding-top: var(--header-size);
+}
+
+.header {
+  height: var(--header-size);
+}
+```
+
+- With the above code we defined a variable named --header-size with a value of 60px, that we then use in our .header class to define a height, but also use on the main element to add some padding.
+
+#### Good to know:
+
+- All CSS custom properties are prefixed with --
+- You can define them on any element, just like a regular CSS property
+- If you define a variable on an element, all it’s children will have access to it.
+- If you override a property on a child, from that element on (including all its children) will use the new value.
+
+### Using CSS variables with Framer Motion
+
+```jsx
+import { motion } from "motion/react";
+
+const App = () => {
+  const scale = useMotionValue(20);
+
+  return (
+    <motion.div
+      style={{
+        "--scale": scale,
+      }}
+    />
+  );
+};
+```
