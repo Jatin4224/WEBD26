@@ -153,6 +153,8 @@ export default App;
 
 ### drag & dragConstraints
 
+#### example 1
+
 ```jsx
 import { motion, useMotionValue } from "motion/react";
 
@@ -166,6 +168,49 @@ const App = () => {
         style={{ x }} // if i dont provide this motion will create its own default value but now when i dragging element our own custom value of x is changing so we can use it in many task.
         className="rounded-full w-32 h-12 bg-blue-500"
       ></motion.div>
+    </div>
+  );
+};
+
+export default App;
+```
+
+#### example 2 - combining it with useTransform
+
+- Because we added our own x motion value, and that value is updated by the drag, we now have a motion value we can use to drive other animations.
+
+### Acceptance criteria
+
+- The color should change when the element moves to the left or right. Be creative with the colors, but make sure the left, center and right ends have different colors! Remember that you should use hex colors (#f00) instead of color names (red) to enable Framer Motion to animate the colors.
+- When the block is moved to the right, it should become larger. When it moves to the left, the size shouldn’t change.
+- When moved left and right, the square should become a circle.
+
+```jsx
+import { motion, useMotionValue, useTransform } from "motion/react";
+
+const App = () => {
+  const x = useMotionValue(0);
+  //making scale animation
+  const scale = useTransform(x, [-100, 0, 100], [1, 1, 1.5]); // if we drag to right our elements becomes large
+  //making elment circular
+  const borderRadius = useTransform(x, [-100, 0, 100], ["50%", "0%", "50%"]); // if i drag elment it becomes cirle
+  //changing background color
+  const backgroundColor = useTransform(
+    x,
+    [-100, 1, 100],
+    ["#6d4b7e", "blue", "green"],
+  );
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <motion.div
+        style={{ x, scale, borderRadius, backgroundColor }}
+        className="w-32 h-32 bg-[#306a87] rounded-md flex items-center justify-center text-white"
+        drag="x"
+        // We talk about the dragConstraints later.
+        // For now, it helps with bouncing the square back to the center
+        // when you release it.
+        dragConstraints={{ left: 0, right: 0 }}
+      />
     </div>
   );
 };
