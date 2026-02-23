@@ -1,18 +1,18 @@
-# part 1 - First steps
+# Part 1 - First steps
 
-## 1 - starting point of the animation (animate prop & initial prop)
+## [1] starting point of the animation (animate prop & initial prop)
 
 ### tailwind class vs initial prop
 
 - it depends on you what u want to use to define initial state i prefer using tailwind classs to define initial state nd animate prop for animations.
 
-## 2 - Addinng a from state to the animation
+## [2] Addinng a from state to the animation
 
 ### using !bg-black important mark in taiwlind with motion what will happen?
 
 - inline stype always wins for any css selector esxpect !important so never use ! in your styles because it will break all the animations.
 
-## 3 - Making the animation loop with keyFrames
+## [3] Making the animation loop with keyFrames
 
 ```jsx
 <motion.div
@@ -31,7 +31,7 @@
 ></motion.div>
 ```
 
-## 4 - Adding interactivity (Hover, focus and tap -- making bouncy effect)
+## [4] Adding interactivity (Hover, focus and tap -- making bouncy effect)
 
 ```jsx
 <motion.button
@@ -53,9 +53,9 @@
 </motion.button>
 ```
 
-# par 2 - Motion values
+# Part 2 - Motion values
 
-## 1 - The core of motion
+## [1] The core of motion
 
 ### useMotionValue hook - used to create our own custom motion values
 
@@ -84,7 +84,7 @@ const App = () => {
 export default App;
 ```
 
-## 2 - Make it bounce like a spring
+## [2] - Make it bounce like a spring
 
 ### useSpring hook
 
@@ -117,7 +117,7 @@ const App = () => {
 export default App;
 ```
 
-## 3 - Transforming motion values
+## [3] Transforming motion values
 
 ### useTransform hook
 
@@ -149,7 +149,7 @@ const App = () => {
 export default App;
 ```
 
-## 4 - Making elements draggable
+## [4] Making elements draggable
 
 ### drag & dragConstraints
 
@@ -218,7 +218,7 @@ const App = () => {
 export default App;
 ```
 
-## 5 - Animating CSS variables (custom properties)
+## [5] Animating CSS variables (custom properties)
 
 ### css variables
 
@@ -267,7 +267,7 @@ const App = () => {
 
 # Part 3 - Stepping Up Your Game
 
-## 1 - Exit Animations
+## [1] Exit Animations
 
 ### [ 1 ] exitProp
 
@@ -275,7 +275,7 @@ const App = () => {
 
 - For it to work though, we need to introduce one more component.
 
-### [2] AnimatePresence -
+### [ 2 ] AnimatePresence
 
 - <AnimatePresence> is a component that wraps around the elements (could be one, or multiple!) you want to animate when they leave the DOM.
 - The important thing this component adds, is that it as soon as an element gets removed from the dom, it actually keeps it around a little bit longer, until the exit animation finishes. Only then it will really unmount it from the page.The important thing this component adds, is that it as soon as an element gets removed from the dom, it actually keeps it around a little bit longer, until the exit animation finishes. Only then it will really unmount it from the page.
