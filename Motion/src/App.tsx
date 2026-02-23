@@ -1,28 +1,30 @@
-import { motion, useMotionValue, useTransform } from "motion/react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const App = () => {
-  const x = useMotionValue(0);
-  //making scale animation
-  const scale = useTransform(x, [-100, 0, 100], [1, 1, 1.5]); // if we drag to right our elements becomes large
-  //making elment circular
-  const borderRadius = useTransform(x, [-100, 0, 100], ["50%", "0%", "50%"]); // if i drag elment it becomes cirle
-  //changing background color
-  const backgroundColor = useTransform(
-    x,
-    [-100, 1, 100],
-    ["#6d4b7e", "blue", "green"],
-  );
+  const [isVisible, setIsVisible] = useState(true);
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <motion.div
-        style={{ x, scale, borderRadius, backgroundColor }}
-        className="w-32 h-32 bg-[#306a87] rounded-md flex items-center justify-center text-white"
-        drag="x"
-        // We talk about the dragConstraints later.
-        // For now, it helps with bouncing the square back to the center
-        // when you release it.
-        dragConstraints={{ left: 0, right: 0 }}
-      />
+    <div className="grid min-h-[400px] items-start rounded-3xl p-5 shadow-2xl">
+      <button
+        className="mx-auto rounded-full bg-black px-5 py-3 text-white"
+        onClick={() => setIsVisible((prev) => !prev)}
+      >
+        Toggle visibility
+      </button>
+      <AnimatePresence initial={false}>
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="mx-auto w-full max-w-[300px] rounded-2xl bg-white p-4 text-black"
+          >
+            <div className="mb-3 aspect-video w-full rounded-xl bg-gray-300" />
+            Random card
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

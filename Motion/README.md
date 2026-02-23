@@ -264,3 +264,55 @@ const App = () => {
   );
 };
 ```
+
+# Part 3 - Stepping Up Your Game
+
+## 1 - Exit Animations
+
+### [ 1 ] exitProp
+
+- The exit prop is similar to initial and animate in the way you use it. You simply pass in a style, and Framer Motion will apply this when the element leaves the DOM.
+
+- For it to work though, we need to introduce one more component.
+
+### [2] AnimatePresence -
+
+- <AnimatePresence> is a component that wraps around the elements (could be one, or multiple!) you want to animate when they leave the DOM.
+- The important thing this component adds, is that it as soon as an element gets removed from the dom, it actually keeps it around a little bit longer, until the exit animation finishes. Only then it will really unmount it from the page.The important thing this component adds, is that it as soon as an element gets removed from the dom, it actually keeps it around a little bit longer, until the exit animation finishes. Only then it will really unmount it from the page.
+
+- So even if you render an element conditionally in React someBoolean && <motion.div />, the element still stays in the DOM when someBoolean becomes false. Thanks to the AnimatePresence component.
+
+```jsx
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+const App = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  return (
+    <div className="grid min-h-[400px] items-start rounded-3xl p-5 shadow-2xl">
+      <button
+        className="mx-auto rounded-full bg-black px-5 py-3 text-white"
+        onClick={() => setIsVisible((prev) => !prev)}
+      >
+        Toggle visibility
+      </button>
+      <AnimatePresence initial={false} // animation fades in when page loads ❌ >
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }} //fade in animation
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="mx-auto w-full max-w-[300px] rounded-2xl bg-white p-4 text-black"
+          >
+            <div className="mb-3 aspect-video w-full rounded-xl bg-gray-300" />
+            Random card
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default App;
+```
