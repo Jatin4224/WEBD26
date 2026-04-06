@@ -1,33 +1,55 @@
-### why Expo ?
+## Why Expo?
 
-- native modules
-- navigation
-- expo go
-- EAS
-- submissions
-- Routing
+- Provides access to **native modules** easily
+- Built-in **navigation support**
+- Use **Expo Go** to test apps instantly
+- Supports **EAS (Expo Application Services)** for building apps
+- Easy **app submission** process
+- File-based **routing with Expo Router**
 
-### what is Expo GO?
+---
 
-- its a free application that you can download from store. u can test your application easily.
+## 📲 What is Expo Go?
 
-## Building first app (pokedox)
+- Expo Go is a **free mobile application** available on app stores
+- It allows you to **run and test your React Native apps instantly** on your device
+- Just scan the QR code from your terminal and see your app live
 
-- npx create-expo-app@latest
-- npx expo start (starts the server)
-- open expo go in your device and scan the qr code show in the terminal
+---
 
-- npm run reset-project (will delete extra folders and make app simple) select n
-- npm run start - to start the server
+## 🛠️ Building First App (Pokédex)
 
-### pokemon api
+### Setup
 
-https://pokeapi.co/
-
-- step 1
-
+```bash
+npx create-expo-app@latest
+npx expo start   # starts the development server
 ```
-<!-- index.tsx -->
+
+- Open **Expo Go** on your phone
+- Scan the QR code shown in the terminal
+
+---
+
+### Project Cleanup
+
+```bash
+npm run reset-project   # removes extra boilerplate (select "n")
+npm run start           # start the server
+```
+
+---
+
+## 🌐 Pokémon API
+
+[https://pokeapi.co/](https://pokeapi.co/)
+
+---
+
+## 📌 Step 1 – Fetch Pokémon List
+
+```tsx
+// index.tsx
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 
@@ -41,12 +63,13 @@ export default function Index() {
       const response = await fetch(
         "https://pokeapi.co/api/v2/pokemon/?limit=20",
       );
-      const data = response.json();
+      const data = await response.json(); // fixed: added await
       console.log(data);
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <View
       style={{
@@ -55,16 +78,17 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>pokedox</Text>
+      <Text>Pokedex</Text>
     </View>
   );
 }
-
 ```
 
-- step 2 (fetching details of each pokemon)
+---
 
-```
+## 📌 Step 2 – Fetch Pokémon Details
+
+```tsx
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
@@ -72,8 +96,10 @@ interface Pokemon {
   name: string;
   image: string;
 }
+
 export default function Index() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+
   useEffect(() => {
     fetchPokemons();
   }, []);
@@ -84,23 +110,26 @@ export default function Index() {
         "https://pokeapi.co/api/v2/pokemon/?limit=20",
       );
       const data = await response.json();
-      //fetch detailed info for each pokemon in parallel
 
+      // Fetch detailed info for each Pokémon in parallel
       const detailedPokemons = await Promise.all(
         data.results.map(async (pokemon: any) => {
           const res = await fetch(pokemon.url);
           const details = await res.json();
+
           return {
             name: pokemon.name,
-            image: details.sprites.front_default, //main sprite
+            image: details.sprites.front_default,
           };
         }),
       );
+
       setPokemons(detailedPokemons);
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <ScrollView>
       {pokemons.map((pokemon) => (
@@ -109,20 +138,27 @@ export default function Index() {
           <Image
             source={{ uri: pokemon.image }}
             style={{ width: 100, height: 100 }}
-          ></Image>
+          />
         </View>
       ))}
     </ScrollView>
   );
 }
-
 ```
 
-step 3 - updating ui using sylesheet, adding routes , Link,pressable
+---
 
-step 4 - updating layout
+## 📌 Step 3 – UI Improvements
 
-```
+- Styled components using **StyleSheet**
+- Added **Pressable** for better interaction
+- Used **Link (Expo Router)** for navigation between screens
+
+---
+
+## 📌 Step 4 – Layout & Navigation Setup
+
+```tsx
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
