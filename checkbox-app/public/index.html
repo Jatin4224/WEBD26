@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1 million checkboxes</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: Inter, sans-serif;
+        background: linear-gradient(135deg, #0f0f0f, #161616, #1f1f1f);
+        color: #ffffff;
+        padding: 40px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+        color: #ffffff;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+      }
+
+      #container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+        gap: 14px;
+        max-width: 1100px;
+        margin: auto;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      }
+
+      input[type="checkbox"] {
+        appearance: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        border: 2px solid #444;
+        background: #181818;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        position: relative;
+      }
+
+      input[type="checkbox"]:hover {
+        transform: scale(1.08);
+        border-color: #8b5cf6;
+        box-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
+      }
+
+      input[type="checkbox"]:checked {
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        border-color: transparent;
+        box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
+      }
+
+      input[type="checkbox"]:checked::after {
+        content: "✓";
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        position: absolute;
+        top: 2px;
+        left: 7px;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        #container {
+          gap: 10px;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Checkbox</h1>
+    <div id="container"></div>
+    //client side socket io
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const container = document.getElementById("container");
+      const CHECKBOX_COUNT = 100;
+
+      //scoket bhiya koi aysa event aaye to usko print kardo
+      socket.on("server:checkbox:change", (data) => {
+        console.log("Socket server Event", data);
+
+        //event aaya uske hisab se ui update
+        const { index, checked } = data;
+
+        //find this input field
+        const input = document.getElementById(`checkbox-${index}`);
+
+        if (input) {
+          input.checked = checked; // jo server n bola checked field us hisab se update ui kardo
+        }
+      });
+
+      window.addEventListener("load", async () => {
+        const response = await fetch("/checkboxes", { method: "GET" });
+        const data = await response.json();
+
+        if (data && data.checkboxes) {
+          data.checkboxes.forEach((serverValue, index) => {
+            const input = document.createElement("input");
+            input.type = "checkbox";
+            input.id = `checkbox-${index}`;
+            input.checked = serverValue;
+            //tracking change in chekcbox
+            input.addEventListener("change", (event) => {
+              const checked = event.target.checked;
+              console.log("checkbox changed", { index, checked });
+              //telling socket server what is happening
+              socket.emit("client:checkbox:change", {
+                index: index,
+                checked: checked,
+              });
+            });
+
+            container.appendChild(input);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
