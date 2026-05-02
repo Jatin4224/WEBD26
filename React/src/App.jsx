@@ -1,10 +1,18 @@
-import One from "./lessons/module_01/One";
+import Five from "./lessons/part01/Five";
+import Four from "./lessons/part01/Four";
+import One from "./lessons/part01/One";
+import Three from "./lessons/part01/Three";
+import Two from "./lessons/part01/Two";
 
 const App = () => {
   return (
     <>
       <div>
-        <One />
+        {/* <One /> */}
+        {/* <Two /> */}
+        {/* <Three /> */}
+        {/* <Four /> */}
+        <Five />
       </div>
     </>
   );
