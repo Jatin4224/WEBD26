@@ -3,16 +3,18 @@ import Four from "./lessons/part01/Four";
 import One from "./lessons/part01/One";
 import Three from "./lessons/part01/Three";
 import Two from "./lessons/part01/Two";
+import Six from "./lessons/part02/Six";
 
 const App = () => {
   return (
     <>
-      <div>
+      <div className="text-white">
         {/* <One /> */}
         {/* <Two /> */}
         {/* <Three /> */}
         {/* <Four /> */}
-        <Five />
+        {/* <Five /> */}
+        <Six />
       </div>
     </>
   );
