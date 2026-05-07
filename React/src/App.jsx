@@ -1,5 +1,7 @@
 import Exercise01 from "./Exercises/state/Exercise01";
 import Counter from "./Exercises/state/Exercise01";
+import Exercise02 from "./Exercises/state/Exercise02";
+import Exercise03 from "./Exercises/state/Exercise03";
 import Five from "./lessons/part01/Five";
 import Four from "./lessons/part01/Four";
 import One from "./lessons/part01/One";
@@ -17,8 +19,9 @@ const App = () => {
         {/* <Four /> */}
         {/* <Five /> */}
         {/* <Six /> */}
-        <Exercise01 />
+        {/* <Exercise01 /> */}
         {/* <Exercise02 /> */}
+        <Exercise03 />
       </div>
     </>
   );
