@@ -28,6 +28,7 @@ import {
 
 function Exercise03() {
   const [count, setCount] = React.useState(0);
+  const [name, setName] = React.useState("Counter Value");
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden px-6">
@@ -38,10 +39,8 @@ function Exercise03() {
       <div className="relative w-full max-w-md rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_0_80px_rgba(255,255,255,0.05)] p-8">
         {/* heading */}
         <div className="text-center mb-8">
-          <p className="text-zinc-400 text-sm tracking-[0.35em] uppercase">
-            Counter Value
-          </p>
-
+          <p className="text-zinc-400 text-sm tracking-[0.35em] uppercase"></p>
+          {name}
           <h1 className="text-8xl font-black text-white mt-4 tracking-tight">
             {count}
           </h1>

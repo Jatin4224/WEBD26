@@ -2,6 +2,8 @@ import Exercise01 from "./Exercises/state/Exercise01";
 import Counter from "./Exercises/state/Exercise01";
 import Exercise02 from "./Exercises/state/Exercise02";
 import Exercise03 from "./Exercises/state/Exercise03";
+import Exercise04 from "./Exercises/state/Exercise04";
+import SearchForm from "./Exercises/state/SearchForm";
 import Five from "./lessons/part01/Five";
 import Four from "./lessons/part01/Four";
 import One from "./lessons/part01/One";
@@ -12,7 +14,7 @@ import Six from "./lessons/part02/Six";
 const App = () => {
   return (
     <>
-      <div className="text-white">
+      <div className="">
         {/* <One /> */}
         {/* <Two /> */}
         {/* <Three /> */}
@@ -21,7 +23,9 @@ const App = () => {
         {/* <Six /> */}
         {/* <Exercise01 /> */}
         {/* <Exercise02 /> */}
-        <Exercise03 />
+        {/* <Exercise03 /> */}
+        {/* <SearchForm /> */}
+        <Exercise04 />
       </div>
     </>
   );
