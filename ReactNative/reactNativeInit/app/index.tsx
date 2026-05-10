@@ -8,7 +8,11 @@ import {
   Pressable,
   Switch,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const USERS = [
   { id: "1", name: "Alice", role: "Designer" },
@@ -23,84 +27,95 @@ export default function HomeScreen() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isDarkMode ? "#0F172A" : "#F8FAFC",
-        },
-      ]}
-    >
-      <Text>welcome to my app</Text>
-
-      {/* remote image from internet */}
-      <Image
-        source={{
-          uri: "https://images.unsplash.com/photo-1777335118390-969261251a29?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }}
-        blurRadius={10}
-        width={200}
-        height={200}
-      />
-
-      {/* Local Image */}
-      <Image
-        source={require("@/assets/images/icon.png")}
-        style={{
-          height: 100,
-          width: 200,
-        }}
-      />
-
-      <TextInput
-        placeholder="enter your name"
-        placeholderTextColor="gray"
-        value={name}
-        onChangeText={setName}
-        style={{
-          width: 200,
-          color: "black",
-          borderWidth: 1,
-          padding: 10,
-          borderRadius: 10,
-        }}
-      />
-
-      <Pressable
-        onPress={() => alert("Button Pressed")}
-        style={({ pressed }) => ({
-          backgroundColor: pressed ? "#4a42d4" : "grey",
-        })}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: isDarkMode ? "#0F172A" : "#F8FAFC",
+          },
+        ]}
       >
-        {({ pressed }) =>
-          pressed ? <Text>Pressing...</Text> : <Text>Press Me</Text>
-        }
-        {/* <Text>Press Me</Text> */}
-      </Pressable>
+        <Text>welcome to my app</Text>
 
-      <View style={styles.switchContainer}>
-        <Text
-          style={{
-            color: isDarkMode ? "#fff" : "#111827",
-            fontWeight: "600",
+        {/* remote image from internet */}
+        <Image
+          source={{
+            uri: "https://images.unsplash.com/photo-1777335118390-969261251a29?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           }}
-        >
-          Dark Mode 🌙
-        </Text>
-        <Switch
-          value={isDarkMode}
-          onValueChange={setIsDarkMode}
-          trackColor={{ false: "#CBD5E1", true: "#8B5CF6" }}
-          thumbColor="#fff"
+          blurRadius={10}
+          width={200}
+          height={200}
         />
-      </View>
 
-      <FlatList
-        data={USERS}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
-      />
-    </View>
+        {/* Local Image */}
+        <Image
+          source={require("@/assets/images/icon.png")}
+          style={{
+            height: 100,
+            width: 200,
+          }}
+        />
+
+        <TextInput
+          placeholder="enter your name"
+          placeholderTextColor="gray"
+          value={name}
+          onChangeText={setName}
+          style={{
+            width: 200,
+            color: "black",
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 10,
+          }}
+        />
+
+        <Pressable
+          onPress={() => alert("Button Pressed")}
+          style={({ pressed }) => ({
+            backgroundColor: pressed ? "#4a42d4" : "grey",
+          })}
+        >
+          {({ pressed }) =>
+            pressed ? <Text>Pressing...</Text> : <Text>Press Me</Text>
+          }
+          {/* <Text>Press Me</Text> */}
+        </Pressable>
+
+        <View>
+          <Text
+            style={{
+              color: isDarkMode ? "#fff" : "#111827",
+              fontWeight: "600",
+            }}
+          >
+            Dark Mode 🌙
+          </Text>
+          <Switch
+            value={isDarkMode}
+            onValueChange={setIsDarkMode}
+            trackColor={{ false: "#CBD5E1", true: "#8B5CF6" }}
+            thumbColor="#fff"
+          />
+        </View>
+
+        <FlatList
+          data={USERS}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ padding: 16 }}
+          renderItem={({ item }) => <Text>{item.name}</Text>}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 1, backgroundColor: "black" }} />
+          )}
+        />
+
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "height" : ""}
+        ></KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
   );
 }
 
