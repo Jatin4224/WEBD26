@@ -14,7 +14,6 @@ No warnings in the dev console
 
 
 */
-import React from "react";
 
 // import { COUNTRIES } from "./data";
 
@@ -23,12 +22,13 @@ import React from "react";
  with the following shape:
 
  {
- AF: "Afghanistan",
- AL: "Albania",
- DZ: "Algeria",
+
  }
 */
+import React from "react";
 
+const DATA = { AF: "Afghanistan", AL: "Albania", DZ: "Algeria" };
+const countries = Object.entries(DATA);
 function Exercise04() {
   const [country, setCountry] = React.useState("");
 
@@ -37,8 +37,19 @@ function Exercise04() {
       <fieldset>
         <legend>Shipping Info</legend>
         <label htmlFor="country">Country:</label>
-        <select id="country" name="country">
-          {/* TODO: Options here! */}
+        <select
+          id="country"
+          name="country"
+          value={country}
+          onChange={(event) => setCountry(event.target.value)}
+        >
+          {" "}
+          <option value="">Select a country</option>
+          {countries.map(([id, label]) => (
+            <option key={id} value={label}>
+              {label}
+            </option>
+          ))}
         </select>
       </fieldset>
 

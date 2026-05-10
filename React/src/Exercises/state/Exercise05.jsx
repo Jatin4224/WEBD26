@@ -14,18 +14,41 @@ A <form> tag should be used.
 
 
 */
-import React from "react";
+import React, { useState } from "react";
 
 const CORRECT_CODE = "123456";
 
-function TwoFactor() {
+function Exercise05() {
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input === CORRECT_CODE) {
+      window.alert("correct code");
+    } else {
+      window.alert("incorrect code");
+    }
+  };
   return (
     <>
-      <label htmlFor="auth-code">Enter authorization code:</label>
-      <div className="row">
-        <input id="auth-code" type="text" required={true} maxLength={6} />
-        <button>Validate</button>
-      </div>
+      <form onClick={handleSubmit}>
+        <label htmlFor="auth-code">Enter authorization code:</label>
+        <div className="row">
+          <input
+            id="auth-code"
+            type="text"
+            required={true}
+            maxLength={6}
+            className="text-black"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button>Validate</button>
+          <h1> {input}</h1>
+        </div>
+      </form>
     </>
   );
 }
+
+export default Exercise05;

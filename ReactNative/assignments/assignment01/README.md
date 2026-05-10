@@ -29,7 +29,7 @@ https://dribbble.com/shots/24783022-osler-AI-Telehealth-Telemedicine-App-Sign-In
 
 ---
 
-## 📸 My UI OUTPUT
+## 📸 MY UI OUTPUT
 
 ### 🔹 Login Screen
 
