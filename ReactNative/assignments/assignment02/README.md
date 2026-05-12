@@ -101,7 +101,7 @@ This screen is used for creating or editing notes.
 
 ### 🖼️ Notes Listing Screen
 
-![Notes Listing](.assets/screenshots/screenshot01.assignment02.jpeg)
+![Notes Listing](./assets/screenshots/screenshot01.assignment02.jpeg)
 
 ### 🖼️ Note Editor Screen
 
