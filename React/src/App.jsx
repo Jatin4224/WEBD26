@@ -1,3 +1,4 @@
+import ColorPicker from "./Exercises/state/ColorPicker";
 import Exercise01 from "./Exercises/state/Exercise01";
 import Counter from "./Exercises/state/Exercise01";
 import Exercise02 from "./Exercises/state/Exercise02";
@@ -29,7 +30,8 @@ const App = () => {
         {/* <SearchForm /> */}
         {/* <Exercise04 /> */}
         {/* <Exercise05 /> */}
-        <Exercise06 />
+        {/* <Exercise06 /> */}
+        <ColorPicker />
       </div>
     </>
   );
