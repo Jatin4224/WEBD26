@@ -1,50 +1,108 @@
-# Welcome to your Expo app 👋
+# 📝 Notes App UI – React Native (Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple and clean Notes App UI built using React Native and Expo.  
+This project focuses on UI design, layout structuring, and React Native core concepts.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Project Overview
 
-   ```bash
-   npm install
-   ```
+This assignment was built to practice:
 
-2. Start the app
+- React Native core components
+- Layout building and UI structuring
+- Responsive mobile UI design
+- Dark/Light theme handling
+- Input handling and search functionality
+- Clean styling practices
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 📱 Screens Implemented
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 1. Notes Listing Screen
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+This screen displays all notes in a clean, scrollable list.
 
-## Get a fresh project
+#### Features:
 
-When you're ready, run:
+- FlatList for rendering notes
+- Each note card contains:
+  - Title
+  - Short preview/content snippet
+  - Date or timestamp
+- Search bar using TextInput
+- Each note wrapped inside Pressable
+- Dark/Light mode toggle (Switch)
+- Clean card-based UI with proper spacing
 
-```bash
-npm run reset-project
-```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Note Editor Screen
 
-## Learn more
+This screen is used for creating or editing notes.
 
-To learn more about developing your project with Expo, look at the following resources:
+#### Features:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- TextInput for note title
+- Multiline TextInput for note content
+- KeyboardAvoidingView to handle keyboard overlap
+- ImageBackground header design
+- Save button (Pressable)
+- Back button (Pressable)
+- Smooth writing experience with proper spacing
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 🎨 Theme Support
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Implemented using `useColorScheme()`
+- Supports:
+  - 🌞 Light Mode
+  - 🌙 Dark Mode
+- UI adapts dynamically based on system theme
+
+---
+
+## 📐 Responsive Design
+
+- Uses `useWindowDimensions()` for responsiveness
+- Works across:
+  - Mobile screens
+  - Tablets
+  - Different screen sizes
+
+---
+
+## 🧠 React Native Concepts Used
+
+- FlatList
+- TextInput
+- Pressable
+- Switch
+- KeyboardAvoidingView
+- ImageBackground
+- SafeAreaView
+- StatusBar
+
+---
+
+## 🎨 Styling Approach
+
+- All styles created using `StyleSheet.create()`
+- Clean separation of UI and logic
+- Consistent spacing and typography
+- Minimal inline styling used
+- UI focused on readability and structure
+
+---
+
+## 📸 Output Screenshots
+
+### 🖼️ Notes Listing Screen
+
+![Notes Listing](.assets/screenshots/screenshot01.assignment02.jpeg)
+
+### 🖼️ Note Editor Screen
+
+![Note Editor](./screenshots/note-editor.png)
