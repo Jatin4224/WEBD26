@@ -6,6 +6,8 @@ import Exercise03 from "./Exercises/state/Exercise03";
 import Exercise04 from "./Exercises/state/Exercise04";
 import Exercise05 from "./Exercises/state/Exercise05";
 import Exercise06 from "./Exercises/state/Exercise06";
+import Exercise07 from "./Exercises/state/Exercise07";
+import Exercise08 from "./Exercises/state/Exercise08";
 import SearchForm from "./Exercises/state/SearchForm";
 import Five from "./lessons/part01/Five";
 import Four from "./lessons/part01/Four";
@@ -31,7 +33,9 @@ const App = () => {
         {/* <Exercise04 /> */}
         {/* <Exercise05 /> */}
         {/* <Exercise06 /> */}
-        <ColorPicker />
+        {/* <ColorPicker /> */}
+        {/* <Exercise07 /> */}
+        <Exercise08 />
       </div>
     </>
   );

@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     marginLeft: 10,
-    backgroundColor: BACKGROUND_COLOR,
+    // backgroundColor: BACKGROUND_COLOR,
   },
 
   input: {
