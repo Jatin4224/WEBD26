@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Feather, AntDesign, Ionicons } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
+import { FallingLeaf } from "./FallingLeaf";
 
 const BACKGROUND_COLOR = "#F7F0E8";
 const CARD_COLOR = "#FFFAF5";
@@ -46,6 +48,8 @@ const notes = [
 
 export default function Index() {
   const [search, setSearch] = useState("");
+
+  const { width } = Dimensions.get("window");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,6 +113,25 @@ export default function Index() {
         />
         <BlurView intensity={1} tint="light" style={styles.blur} />
       </View>
+
+      {/* leafdrop animation */}
+      <FallingLeaf
+        source={require("@/assets/leaf.png")}
+        startX={width - 50}
+        delay={0}
+      />
+
+      <FallingLeaf
+        source={require("@/assets/leaf.png")}
+        startX={width - 80}
+        delay={500}
+      />
+
+      <FallingLeaf
+        source={require("@/assets/leaf.png")}
+        startX={width - 120}
+        delay={1000}
+      />
     </SafeAreaView>
   );
 }
