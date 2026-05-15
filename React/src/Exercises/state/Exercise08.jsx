@@ -2,7 +2,7 @@ import React from "react";
 
 const stickersData = [
   {
-    src: "https://cdn-icons-png.flaticon.com/512/616/616494.png",
+    src: "https://images.pexels.com/photos/37510829/pexels-photo-37510829.jpeg",
     alt: "leaf",
     width: 80,
     height: 80,
