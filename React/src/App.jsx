@@ -1,3 +1,4 @@
+import SignupForm from "./Exercises/hooks/Exercise12";
 import ColorPicker from "./Exercises/state/ColorPicker";
 import Exercise01 from "./Exercises/state/Exercise01";
 import Counter from "./Exercises/state/Exercise01";
@@ -16,7 +17,8 @@ import Three from "./lessons/part01/Three";
 import Two from "./lessons/part01/Two";
 import Six from "./lessons/part02/Six";
 import UseEffectCounter from "./React-Hooks/useEffect-hook/useEffect";
-
+import isDarkMode from "./Exercises/hooks/Exercise13";
+import IsDarkMode from "./Exercises/hooks/Exercise13";
 const App = () => {
   return (
     <>
@@ -37,7 +39,9 @@ const App = () => {
         {/* <ColorPicker /> */}
         {/* <Exercise07 /> */}
         {/* <Exercise08 /> */}
-        <UseEffectCounter />
+        {/* <UseEffectCounter /> */}
+        {/* <SignupForm /> */}
+        <IsDarkMode />
       </div>
     </>
   );
