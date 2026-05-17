@@ -15,6 +15,7 @@ import One from "./lessons/part01/One";
 import Three from "./lessons/part01/Three";
 import Two from "./lessons/part01/Two";
 import Six from "./lessons/part02/Six";
+import UseEffectCounter from "./React-Hooks/useEffect-hook/useEffect";
 
 const App = () => {
   return (
@@ -35,7 +36,8 @@ const App = () => {
         {/* <Exercise06 /> */}
         {/* <ColorPicker /> */}
         {/* <Exercise07 /> */}
-        <Exercise08 />
+        {/* <Exercise08 /> */}
+        <UseEffectCounter />
       </div>
     </>
   );
