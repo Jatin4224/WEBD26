@@ -3,7 +3,13 @@ import { initTRPC } from "@trpc/server";
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
-const t = initTRPC.create();
+const t = initTRPC
+  .context<{
+    username?: string;
+    // mongoose:MongoDb
+    // prsima:
+  }>()
+  .create();
 /**
  * Export reusable router and procedure helpers
  * that can be used throughout the router

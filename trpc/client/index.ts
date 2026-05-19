@@ -9,14 +9,19 @@ const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: "http://localhost:3000",
+      async headers() {
+        return {
+          Authroization: "Bearer 123",
+        };
+      },
     }),
   ],
 });
 
 async function main() {
-  let response = await trpc.createTodo.mutate({
-    title: "go to gym",
-    description: "hit the gym",
+  let response = await trpc.signUp.mutate({
+    email: "jatin@gmail.com",
+    password: "123456",
   });
   console.log(response);
 }
