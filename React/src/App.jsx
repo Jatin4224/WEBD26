@@ -19,6 +19,7 @@ import Six from "./lessons/part02/Six";
 import UseEffectCounter from "./React-Hooks/useEffect-hook/useEffect";
 import isDarkMode from "./Exercises/hooks/Exercise13";
 import IsDarkMode from "./Exercises/hooks/Exercise13";
+import Animated from "./components/Animated";
 const App = () => {
   return (
     <>
@@ -41,7 +42,10 @@ const App = () => {
         {/* <Exercise08 /> */}
         {/* <UseEffectCounter /> */}
         {/* <SignupForm /> */}
-        <IsDarkMode />
+        {/* <IsDarkMode /> */}
+        <Animated />
+        <Animated />
+        <Animated />
       </div>
     </>
   );

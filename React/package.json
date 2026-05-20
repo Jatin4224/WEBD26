@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "motion": "^12.34.0",
+    "motion": "^12.39.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-feather": "^2.0.10",
