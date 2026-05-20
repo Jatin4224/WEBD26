@@ -1,5 +1,6 @@
 import React from "react";
 import demoVideo from "../assets/video.mp4";
+import PhonePreview from "./PhonePreview";
 export default function Animated() {
   return (
     <main className="min-h-screen bg-[#0b0b0c] text-white relative overflow-hidden">
@@ -49,25 +50,7 @@ export default function Animated() {
             <div className="relative">
               {/* Phone Glow */}
               <div className="absolute inset-0 bg-orange-400/20 blur-[80px] rounded-full" />
-
-              {/* Phone Frame */}
-              <div className="relative w-[310px] h-[640px] rounded-[3rem] bg-black border-[10px] border-zinc-800 shadow-2xl overflow-hidden">
-                {/* Notch */}
-                {/* <div className="absolute top-1 left-1/2 -translate-x-1/2 w-88 h-7 bg-zinc-800 rounded-full z-20" /> */}
-
-                {/* Video */}
-                <video
-                  className="w-full h-full object-cover"
-                  src={demoVideo}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-
-                {/* Overlay */}
-                <div className="absolute inset-0 ring-1 ring-white/10 rounded-[2.4rem] pointer-events-none" />
-              </div>
+              <PhonePreview />
             </div>
           </div>
         </div>
