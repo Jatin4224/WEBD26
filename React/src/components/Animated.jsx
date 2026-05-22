@@ -1,4 +1,7 @@
 import demoVideo from "../assets/video.mp4";
+// Note: Make sure to import your image just like your video!
+import demoImage from "../assets/image1.png";
+
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -51,14 +54,14 @@ const Icons = {
   ),
 };
 
-// --- FLOATING PARTICLES ---
+// --- FLOATING PARTICLES (PEACH) ---
 const Particles = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-indigo-400 rounded-full"
+          className="absolute w-1 h-1 bg-[#ffbda7] rounded-full"
           initial={{
             opacity: Math.random() * 0.5 + 0.1,
             x: Math.random() * 100 + "vw",
@@ -76,7 +79,7 @@ const Particles = () => {
           }}
           style={{
             filter: "blur(1px)",
-            boxShadow: "0 0 15px 2px rgba(129, 140, 248, 0.4)",
+            boxShadow: "0 0 15px 2px rgba(255, 189, 167, 0.4)",
           }}
         />
       ))}
@@ -85,7 +88,7 @@ const Particles = () => {
 };
 
 // --- DETAILED PREVIEW MODAL ---
-const PreviewModal = ({ isOpen, onClose, videoSrc }) => {
+const PreviewModal = ({ isOpen, onClose, videoSrc, imageSrc }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -93,7 +96,7 @@ const PreviewModal = ({ isOpen, onClose, videoSrc }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
           onClick={onClose}
         >
           {/* Modal Content */}
@@ -102,18 +105,18 @@ const PreviewModal = ({ isOpen, onClose, videoSrc }) => {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-[400px] aspect-[9/19] bg-[#0c0c0e] rounded-[2rem] sm:rounded-[3rem] border-[4px] border-zinc-800 overflow-hidden shadow-2xl ring-1 ring-white/20"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the video itself
+            className="relative w-full max-w-[400px] aspect-[9/19] bg-[#0c0a09] rounded-[2rem] sm:rounded-[3rem] border-[4px] border-[#ffbda7]/20 overflow-hidden shadow-[0_0_50px_rgba(255,189,167,0.15)] ring-1 ring-white/10"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-50 p-2.5 bg-black/50 hover:bg-black/80 rounded-full text-white backdrop-blur-md transition-colors border border-white/10"
+              className="absolute top-4 right-4 z-50 p-2.5 bg-black/50 hover:bg-[#ffbda7]/20 rounded-full text-white backdrop-blur-md transition-colors border border-white/10 hover:border-[#ffbda7]/50"
             >
               <Icons.Close className="w-5 h-5" />
             </button>
 
-            {/* Video Inside Modal */}
+            {/* Media Inside Modal */}
             {videoSrc ? (
               <video
                 src={videoSrc}
@@ -123,8 +126,14 @@ const PreviewModal = ({ isOpen, onClose, videoSrc }) => {
                 playsInline
                 className="w-full h-full object-cover"
               />
+            ) : imageSrc ? (
+              <img
+                src={imageSrc}
+                alt="App Preview Full"
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-zinc-500 bg-zinc-900">
+              <div className="w-full h-full flex items-center justify-center text-zinc-500 bg-[#0c0a09]">
                 No Preview Available
               </div>
             )}
@@ -136,12 +145,12 @@ const PreviewModal = ({ isOpen, onClose, videoSrc }) => {
 };
 
 // --- 3D PHONE MOCKUP COMPONENT ---
-const PhoneMockup = ({ videoSrc, onScreenClick }) => {
+const PhoneMockup = ({ videoSrc, imageSrc, onScreenClick }) => {
   return (
     <div className="relative flex justify-center items-center perspective-[2000px] mt-12 lg:mt-0 z-10 w-full">
-      {/* Background Spotlight Glow */}
-      <div className="absolute inset-0 w-full h-[120%] top-[-10%] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute w-[80%] h-[80%] bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
+      {/* Background Spotlight Glow (Peach) */}
+      <div className="absolute inset-0 w-full h-[120%] top-[-10%] bg-[#ffbda7]/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute w-[80%] h-[80%] bg-[#ff9a76]/10 blur-[100px] rounded-full pointer-events-none" />
 
       {/* 3D Tilted Wrapper */}
       <motion.div
@@ -157,16 +166,16 @@ const PhoneMockup = ({ videoSrc, onScreenClick }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           {/* The Phone Container */}
-          <div className="w-[280px] sm:w-[320px] h-[580px] sm:h-[650px] bg-[#0c0c0e] rounded-[2.5rem] sm:rounded-[3rem] border-[6px] sm:border-[8px] border-zinc-800/80 overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] ring-1 ring-white/10">
+          <div className="w-[280px] sm:w-[320px] h-[580px] sm:h-[650px] bg-[#0c0a09] rounded-[2.5rem] sm:rounded-[3rem] border-[6px] sm:border-[8px] border-zinc-800/80 overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] ring-1 ring-white/10">
             {/* Dynamic Island */}
-            {/* <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 sm:w-28 h-7 bg-black rounded-full z-40 flex items-center justify-between px-2 shadow-sm">
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 sm:w-28 h-7 bg-black rounded-full z-40 flex items-center justify-between px-2 shadow-sm">
               <div className="w-2 h-2 bg-zinc-800 rounded-full"></div>
-              <div className="w-2 h-2 bg-indigo-900 rounded-full shadow-[0_0_4px_#4f46e5]"></div>
-            </div> */}
+              <div className="w-2 h-2 bg-[#ffbda7] rounded-full shadow-[0_0_4px_#ffbda7]"></div>
+            </div>
 
-            {/* Interactive Video Player */}
+            {/* Interactive Media Player */}
             <div
-              className="w-full h-full bg-zinc-900 relative group/screen cursor-pointer"
+              className="w-full h-full bg-[#0c0a09] relative group/screen cursor-pointer"
               onClick={onScreenClick}
             >
               {videoSrc ? (
@@ -176,24 +185,30 @@ const PhoneMockup = ({ videoSrc, onScreenClick }) => {
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover   transition-transform duration-700 group-hover/screen:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/screen:scale-105"
+                />
+              ) : imageSrc ? (
+                <img
+                  src={imageSrc}
+                  alt="App Preview"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/screen:scale-105"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-zinc-600 text-sm">
-                  No video provided
+                <div className="w-full h-full flex items-center justify-center text-zinc-600 text-sm font-sans">
+                  No media provided
                 </div>
               )}
 
-              {/* Play Button Overlay (Appears on hover) */}
+              {/* Play/Expand Button Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/screen:opacity-100 transition-opacity duration-300 flex items-center justify-center z-30">
-                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-lg border border-white/30 transform group-hover/screen:scale-110 transition-transform duration-300">
-                  <Icons.Play className="w-7 h-7 text-white ml-1" />
+                <div className="w-16 h-16 rounded-full bg-[#ffbda7]/20 backdrop-blur-md flex items-center justify-center shadow-[0_0_20px_rgba(255,189,167,0.3)] border border-[#ffbda7]/30 transform group-hover/screen:scale-110 transition-transform duration-300">
+                  <Icons.Play className="w-7 h-7 text-[#ffbda7] ml-1" />
                 </div>
               </div>
             </div>
 
             {/* Mock Home Indicator */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-white/50 rounded-full z-40 pointer-events-none"></div>
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-white/30 rounded-full z-40 pointer-events-none"></div>
           </div>
         </motion.div>
       </motion.div>
@@ -209,7 +224,8 @@ export const AppShowcaseSection = ({
   features = ["Feature 1", "Feature 2", "Feature 3"],
   ctaText = "Download Now",
   ctaHref = "#",
-  videoSrc = "",
+  videoSrc = "", // FIX: Default to empty string so imageSrc can trigger!
+  imageSrc = "",
   badgeText = "New Release",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -233,14 +249,21 @@ export const AppShowcaseSection = ({
 
   return (
     <>
-      <section className="relative min-h-screen bg-[#050507] text-white overflow-hidden font-sans flex items-center justify-center py-20 lg:py-16 selection:bg-indigo-500/30 selection:text-indigo-200">
-        {/* Background Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0" />
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+          .font-cinzel {
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+          }
+        `}
+      </style>
 
+      <section className="relative min-h-screen bg-[#0a0807] text-white overflow-hidden font-sans flex items-center justify-center py-20 lg:py-16 selection:bg-[#ffbda7]/30 selection:text-[#ffe4db]">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,189,167,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,189,167,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0" />
         <Particles />
 
         <div className="max-w-7xl w-full mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
-          {/* Left Side: Content */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -251,10 +274,10 @@ export const AppShowcaseSection = ({
             {badgeText && (
               <motion.div
                 variants={itemVariants}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(99,102,241,0.15)]"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#ffbda7]/30 bg-[#ffbda7]/10 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(255,189,167,0.15)] font-cinzel"
               >
-                <Icons.Sparkle className="w-4 h-4 text-indigo-400" />
-                <span className="text-xs uppercase tracking-[0.15em] text-indigo-300 font-semibold">
+                <Icons.Sparkle className="w-4 h-4 text-[#ffbda7]" />
+                <span className="text-xs uppercase tracking-[0.15em] text-[#ffbda7] mt-0.5">
                   {badgeText}
                 </span>
               </motion.div>
@@ -262,7 +285,7 @@ export const AppShowcaseSection = ({
 
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-4 text-zinc-100"
+              className="text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-tight mb-4 text-zinc-100 font-cinzel"
             >
               {title}
             </motion.h1>
@@ -270,7 +293,7 @@ export const AppShowcaseSection = ({
             {subtitle && (
               <motion.h2
                 variants={itemVariants}
-                className="text-2xl sm:text-3xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 mb-6 drop-shadow-sm"
+                className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#ffcba4] to-[#ff9a76] mb-6 drop-shadow-sm font-cinzel"
               >
                 {subtitle}
               </motion.h2>
@@ -291,10 +314,10 @@ export const AppShowcaseSection = ({
                 {features.map((feature, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-3 text-zinc-300 bg-white/[0.02] border border-white/[0.05] p-3 rounded-xl backdrop-blur-sm transition-colors hover:bg-white/[0.04]"
+                    className="flex items-start gap-3 text-zinc-300 bg-white/[0.02] border border-[#ffbda7]/10 p-3 rounded-xl backdrop-blur-sm transition-colors hover:bg-[#ffbda7]/5"
                   >
-                    <div className="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center shadow-[0_0_10px_rgba(99,102,241,0.1)]">
-                      <Icons.Check className="w-3.5 h-3.5 text-indigo-400" />
+                    <div className="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-[#ffbda7]/10 border border-[#ffbda7]/30 flex items-center justify-center shadow-[0_0_10px_rgba(255,189,167,0.1)]">
+                      <Icons.Check className="w-3.5 h-3.5 text-[#ffbda7]" />
                     </div>
                     <span className="font-medium text-sm sm:text-base leading-snug">
                       {feature}
@@ -307,26 +330,28 @@ export const AppShowcaseSection = ({
             <motion.div variants={itemVariants} className="w-full sm:w-auto">
               <a
                 href={ctaHref}
-                className="inline-flex w-full sm:w-auto justify-center items-center px-8 py-4 rounded-full bg-white text-black font-semibold text-sm tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300"
+                className="inline-flex w-full sm:w-auto justify-center items-center px-8 py-4 rounded-full bg-gradient-to-r from-[#ffcba4] to-[#ff9a76] text-[#0a0807] font-bold text-sm tracking-wide hover:scale-105 hover:shadow-[0_0_30px_rgba(255,189,167,0.4)] transition-all duration-300 font-cinzel"
               >
                 {ctaText}
               </a>
             </motion.div>
           </motion.div>
 
-          {/* Right Side: Tilted Phone Mockup */}
+          {/* FIX: Passing both videoSrc and imageSrc down to PhoneMockup */}
           <PhoneMockup
             videoSrc={videoSrc}
+            imageSrc={imageSrc}
             onScreenClick={() => setIsModalOpen(true)}
           />
         </div>
       </section>
 
-      {/* The Detailed Preview Modal */}
+      {/* FIX: Passing both videoSrc and imageSrc down to PreviewModal */}
       <PreviewModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         videoSrc={videoSrc}
+        imageSrc={imageSrc}
       />
     </>
   );
@@ -337,64 +362,38 @@ export default function App() {
   return (
     <div>
       <AppShowcaseSection
-        badgeText="Interactive Preview"
-        title="Experience the app before you download."
-        subtitle="Next-Gen UI Components"
-        description="Stop wasting time building from scratch. Use our premium, highly customizable components to ship your product in days instead of months. Click the phone to see it in action."
+        badgeText="Expo UI Showcase"
+        title="Crafting cinematic mobile experiences with Expo."
+        subtitle="Interactive UI Library for React Native"
+        description="A curated collection of premium Expo app screens, animations, and UI experiments built to inspire developers and designers."
         features={[
-          "Click the phone for a detailed preview",
-          "Fully responsive & animated modal",
-          "Dark mode optimized with glassmorphism",
+          "Watch real app screen recordings",
+          "Explore reusable components",
         ]}
-        ctaText="Get Started For Free"
-        ctaHref="#get-started"
-        // Replace with your own vertical mobile video URL
+        ctaText="Explore Components"
         videoSrc={demoVideo}
+        imageSrc={demoImage} // Provide the imported image!
       />
+
       <AppShowcaseSection
-        badgeText="Interactive Preview"
-        title="Experience the app before you download."
-        subtitle="Next-Gen UI Components"
-        description="Stop wasting time building from scratch. Use our premium, highly customizable components to ship your product in days instead of months. Click the phone to see it in action."
-        features={[
-          "Click the phone for a detailed preview",
-          "Fully responsive & animated modal",
-          "Dark mode optimized with glassmorphism",
-        ]}
-        ctaText="Get Started For Free"
-        ctaHref="#get-started"
-        // Replace with your own vertical mobile video URL
-        videoSrc={demoVideo}
+        badgeText="Week 3 Assignment"
+        title="Build Food delivery App."
+        subtitle="Expo React Native Navigation Assignment"
+        description="A One Piece-inspired food delivery app built with Expo and React Navigation."
+        features={["Nested Stack, Tabs & Drawer", "Deep linking support"]}
+        ctaText="View Assignment"
+        videoSrc={demoVideo} // Video plays
       />
+
       <AppShowcaseSection
-        badgeText="Interactive Preview"
-        title="Experience the app before you download."
-        subtitle="Next-Gen UI Components"
-        description="Stop wasting time building from scratch. Use our premium, highly customizable components to ship your product in days instead of months. Click the phone to see it in action."
-        features={[
-          "Click the phone for a detailed preview",
-          "Fully responsive & animated modal",
-          "Dark mode optimized with glassmorphism",
-        ]}
-        ctaText="Get Started For Free"
-        ctaHref="#get-started"
-        // Replace with your own vertical mobile video URL
-        videoSrc={demoVideo}
-      />
-      <AppShowcaseSection
-        badgeText="Interactive Preview"
-        title="Experience the app before you download."
-        subtitle="Next-Gen UI Components"
-        description="Stop wasting time building from scratch. Use our premium, highly customizable components to ship your product in days instead of months. Click the phone to see it in action."
-        features={[
-          "Click the phone for a detailed preview",
-          "Fully responsive & animated modal",
-          "Dark mode optimized with glassmorphism",
-        ]}
-        ctaText="Get Started For Free"
-        ctaHref="#get-started"
-        // Replace with your own vertical mobile video URL
-        videoSrc={demoVideo}
+        badgeText="Image Fallback Test"
+        title="Testing the image fallback."
+        subtitle="Only passing an image this time"
+        description="Because we did not provide videoSrc, this section will automatically display the image provided."
+        features={["No video source provided", "Image shows up perfectly"]}
+        ctaText="Explore Components"
+        // NO videoSrc here -> Falls back to imageSrc!
+        imageSrc={demoImage}
       />
     </div>
   );

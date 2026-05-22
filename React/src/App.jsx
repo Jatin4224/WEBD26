@@ -21,6 +21,8 @@ import isDarkMode from "./Exercises/hooks/Exercise13";
 import IsDarkMode from "./Exercises/hooks/Exercise13";
 import Animated from "./components/Animated";
 import PhonePreview from "./components/PhonePreview";
+import { NotesShowcase } from "./components/NotesShowCase";
+import { FunkyNotes } from "./components/FunkyNotes";
 const App = () => {
   return (
     <>
@@ -45,6 +47,8 @@ const App = () => {
         {/* <SignupForm /> */}
         {/* <IsDarkMode /> */}
         <Animated />
+        {/* <NotesShowcase /> */}
+        {/* <FunkyNotes /> */}
       </div>
     </>
   );

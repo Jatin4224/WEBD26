@@ -16,6 +16,7 @@
     "react-dom": "^19.2.0",
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.75.0",
+    "react-markdown": "^10.1.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
