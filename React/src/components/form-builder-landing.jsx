@@ -856,8 +856,10 @@ export default function FormBuild() {
                 style={{
                   position: "absolute",
                   bottom: 0,
-                  left: "10%",
-                  height: "88%",
+                  left: "20%",
+
+                  height: "100%",
+                  width: "100%",
                   zIndex: 2,
                   animation: "floatChar 6s ease-in-out infinite",
                   filter:

@@ -24,6 +24,7 @@ import PhonePreview from "./components/PhonePreview";
 import { NotesShowcase } from "./components/NotesShowCase";
 import { FunkyNotes } from "./components/FunkyNotes";
 import FormBuild from "./components/form-builder-landing";
+import SirupPortfolio from "./components/sirup-portfolio";
 
 const App = () => {
   return (
@@ -51,7 +52,8 @@ const App = () => {
         {/* <Animated /> */}
         {/* <NotesShowcase /> */}
         {/* <FunkyNotes /> */}
-        <FormBuild />
+        {/* <FormBuild /> */}
+        <SirupPortfolio />
       </div>
     </>
   );
