@@ -1,4 +1,5 @@
 import demoVideo from "../assets/video.mp4";
+import foodDemoVideo from "../assets/food.mp4";
 // Note: Make sure to import your image just like your video!
 import demoImage from "../assets/image1.png";
 
@@ -382,7 +383,7 @@ export default function App() {
         description="A One Piece-inspired food delivery app built with Expo and React Navigation."
         features={["Nested Stack, Tabs & Drawer", "Deep linking support"]}
         ctaText="View Assignment"
-        videoSrc={demoVideo} // Video plays
+        videoSrc={foodDemoVideo} // Video plays
       />
 
       <AppShowcaseSection

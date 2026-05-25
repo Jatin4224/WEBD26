@@ -23,6 +23,8 @@ import Animated from "./components/Animated";
 import PhonePreview from "./components/PhonePreview";
 import { NotesShowcase } from "./components/NotesShowCase";
 import { FunkyNotes } from "./components/FunkyNotes";
+import FormBuild from "./components/form-builder-landing";
+
 const App = () => {
   return (
     <>
@@ -46,9 +48,10 @@ const App = () => {
         {/* <UseEffectCounter /> */}
         {/* <SignupForm /> */}
         {/* <IsDarkMode /> */}
-        <Animated />
+        {/* <Animated /> */}
         {/* <NotesShowcase /> */}
         {/* <FunkyNotes /> */}
+        <FormBuild />
       </div>
     </>
   );
