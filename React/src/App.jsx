@@ -25,6 +25,8 @@ import { NotesShowcase } from "./components/NotesShowCase";
 import { FunkyNotes } from "./components/FunkyNotes";
 import FormBuild from "./components/form-builder-landing";
 import SirupPortfolio from "./components/sirup-portfolio";
+import LoginButton from "./components/Button";
+import House from "./components/House";
 
 const App = () => {
   return (
@@ -53,7 +55,8 @@ const App = () => {
         {/* <NotesShowcase /> */}
         {/* <FunkyNotes /> */}
         {/* <FormBuild /> */}
-        <SirupPortfolio />
+        {/* <SirupPortfolio /> */}
+        <House />
       </div>
     </>
   );

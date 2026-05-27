@@ -29,7 +29,7 @@ const DATA = {
       title: "Brand Identity System",
       tags: "VISUAL · TYPOGRAPHY · COLOR",
       image:
-        "https://images.unsplash.com/photo-1778517436057-4ed5f9fe95bd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzMnx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.pexels.com/photos/33949901/pexels-photo-33949901.jpeg",
     },
     {
       id: "02",
@@ -37,7 +37,7 @@ const DATA = {
       title: "Web Application UI",
       tags: "REACT · NEXT.JS · TAILWIND",
       image:
-        "https://images.unsplash.com/photo-1773332611573-5e5bfa8e5de5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1N3x8fGVufDB8fHx8fA%3D%3D",
+        "https://images.pexels.com/photos/33987072/pexels-photo-33987072.jpeg",
     },
     {
       id: "03",
@@ -45,7 +45,31 @@ const DATA = {
       title: "Interactive Experience",
       tags: "THREE.JS · WEBGL · GSAP",
       image:
-        "https://images.unsplash.com/photo-1778414702186-51591cbe3eef?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2MXx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.pexels.com/photos/33987076/pexels-photo-33987076.jpeg",
+    },
+    {
+      id: "03",
+      cat: "MOTION",
+      title: "Interactive Experience",
+      tags: "THREE.JS · WEBGL · GSAP",
+      image:
+        "https://images.pexels.com/photos/33986933/pexels-photo-33986933.jpeg",
+    },
+    {
+      id: "03",
+      cat: "MOTION",
+      title: "Interactive Experience",
+      tags: "THREE.JS · WEBGL · GSAP",
+      image:
+        "https://images.pexels.com/photos/33948499/pexels-photo-33948499.jpeg",
+    },
+    {
+      id: "03",
+      cat: "MOTION",
+      title: "Interactive Experience",
+      tags: "THREE.JS · WEBGL · GSAP",
+      image:
+        "https://images.pexels.com/photos/33986887/pexels-photo-33986887.jpeg",
     },
   ],
   aboutEst: "est. 2020 · based in your city",
@@ -445,14 +469,14 @@ function ArchPortal() {
     overflow: "hidden",
     borderRadius: "50% 50% 0 0 / 35% 35% 0 0",
     background: `
-      radial-gradient(
-        circle at 25% 35%,
-        rgba(155,200,255,0.22) 0%,
-        rgba(70,115,220,0.18) 18%,
-        rgba(28,44,88,0.45) 42%,
-        rgba(12,18,35,0.92) 70%,
-        rgba(4,6,12,1) 100%
-      )
+     radial-gradient(
+  circle at 25% 35%,
+  rgba(210, 235, 255, 0.28) 0%,
+  rgba(165, 205, 255, 0.22) 18%,
+  rgba(90, 140, 220, 0.16) 42%,
+  rgba(28, 44, 88, 0.72) 70%,
+  rgba(8, 12, 24, 1) 100%
+)
     `,
     boxShadow:
       "0 0 70px rgba(60,120,255,0.08), inset 0 0 90px rgba(0,0,0,0.55)",
@@ -1008,6 +1032,98 @@ export default function SirupPortfolio() {
           </section>
 
           {/* ABOUT */}
+          <Reveal delay={150}>
+            <section
+              style={{
+                padding: "80px 24px 120px",
+                maxWidth: 700,
+                margin: "0 auto",
+                position: "relative",
+              }}
+            >
+              <motion.div
+                initial={{ scaleY: 0 }}
+                whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.1, ease: easeOutExpo }}
+                style={{
+                  position: "absolute",
+                  left: "-10%",
+                  top: 0,
+                  width: 1,
+                  height: "100%",
+                  transformOrigin: "top",
+                  background:
+                    "linear-gradient(to bottom,transparent,rgba(232,180,160,0.2) 20%,rgba(232,180,160,0.2) 80%,transparent)",
+                }}
+              />
+
+              <div
+                style={{
+                  fontFamily: "'DM Mono',monospace",
+                  fontSize: 10,
+                  letterSpacing: "0.3em",
+                  color: "rgba(232,180,160,0.5)",
+                  marginBottom: 32,
+                }}
+              >
+                {DATA.aboutEst}
+              </div>
+
+              <h2
+                style={{
+                  fontFamily: "'Playfair Display',serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(28px,5vw,48px)",
+                  lineHeight: 1.2,
+                  color: "#f0e8e0",
+                  marginBottom: 32,
+                }}
+              >
+                A creative mind
+                <br />
+                with{" "}
+                <motion.em
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{
+                    duration: 3.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    fontStyle: "italic",
+                    color: "rgba(232,180,160,0.8)",
+                  }}
+                >
+                  deep roots
+                </motion.em>
+                <br />
+                in digital craft.
+              </h2>
+
+              <p
+                style={{
+                  fontFamily: "'Libre Baskerville',serif",
+                  fontSize: 14,
+                  lineHeight: 2,
+                  color: "rgba(240,232,224,0.55)",
+                  marginBottom: 24,
+                }}
+              >
+                {DATA.aboutBody}
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Libre Baskerville',serif",
+                  fontSize: 14,
+                  lineHeight: 2,
+                  color: "rgba(240,232,224,0.55)",
+                }}
+              >
+                {DATA.aboutCta}
+              </p>
+            </section>
+          </Reveal>
           <Reveal delay={150}>
             <section
               style={{
