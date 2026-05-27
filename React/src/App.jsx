@@ -28,6 +28,7 @@ import SirupPortfolio from "./components/sirup-portfolio";
 import LoginButton from "./components/Button";
 import House from "./components/House";
 import Character from "./components/Character";
+import UchihaLogin from "./components/UchihaLogin";
 
 const App = () => {
   return (
@@ -58,7 +59,8 @@ const App = () => {
         {/* <FormBuild /> */}
         {/* <SirupPortfolio /> */}
         <Character />
-        <House />
+        {/* <House /> */}
+        <UchihaLogin />
       </div>
     </>
   );
