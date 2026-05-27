@@ -27,11 +27,12 @@ import FormBuild from "./components/form-builder-landing";
 import SirupPortfolio from "./components/sirup-portfolio";
 import LoginButton from "./components/Button";
 import House from "./components/House";
+import Character from "./components/Character";
 
 const App = () => {
   return (
     <>
-      <div className="">
+      <div className="relative overflow-hidden bg-cover bg-top min-h-screen">
         {/* <One /> */}
         {/* <Two /> */}
         {/* <Three /> */}
@@ -56,6 +57,7 @@ const App = () => {
         {/* <FunkyNotes /> */}
         {/* <FormBuild /> */}
         {/* <SirupPortfolio /> */}
+        <Character />
         <House />
       </div>
     </>

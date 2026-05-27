@@ -1,0 +1,45 @@
+.screen {
+  position: fixed;
+  inset: 0; /* shorthand for top/left/right/bottom: 0 */
+  background: #0f0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  gap: 12px;
+}
+
+.gif {
+  width: 375px;
+  height: 375px;
+  object-fit: contain;
+  image-rendering: pixelated; /* keeps pixel art crisp */
+}
+
+.text {
+  font-family: "Love Ya Like A Sister", cursive; /* or your chosen font */
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 4px;
+  width: 0%; /* animated by Framer */
+}
+
+.percent {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
