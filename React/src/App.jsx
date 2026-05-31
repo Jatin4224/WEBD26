@@ -29,6 +29,8 @@ import LoginButton from "./components/Button";
 import House from "./components/House";
 import Character from "./components/Character";
 import UchihaLogin from "./components/UchihaLogin";
+import CodeSnippetLogin from "./components/Svg";
+import RaccoonAssistant from "./components/RacoonAi";
 
 const App = () => {
   return (
@@ -58,9 +60,11 @@ const App = () => {
         {/* <FunkyNotes /> */}
         {/* <FormBuild /> */}
         {/* <SirupPortfolio /> */}
-        <Character />
-        {/* <House /> */}
+        {/* <Character />
         <UchihaLogin />
+        <House /> */}
+        {/* <CodeSnippetLogin /> */}
+        <RaccoonAssistant />
       </div>
     </>
   );

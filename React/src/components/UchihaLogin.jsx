@@ -4,6 +4,8 @@ import bg from "../assets/house-room-two.png";
 import doorLeft from "../assets/left-door.png";
 import doorRight from "../assets/right-door.png";
 import doorSound from "../assets/door.mp3";
+import Character from "./Character";
+import stormVideo from "../assets/storm.mp4";
 
 const YOUTUBE_VIDEO_ID = "5j7OGHxO4PI";
 export default function UchihaLogin() {
@@ -11,22 +13,19 @@ export default function UchihaLogin() {
   const [loading, setLoading] = useState(false);
   const [doorOpen, setDoorOpen] = useState(false);
   const audioRef = useRef(null);
-  const iframeRef = useRef(null);
+  const videoRef = useRef(null);
 
   const handleLogin = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 1800);
   };
 
-  const sendCommand = (func) => {
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({
-        event: "command",
-        func,
-        args: [],
-      }),
-      "*",
-    );
+  const playVideo = () => {
+    videoRef.current?.play();
+  };
+
+  const pauseVideo = () => {
+    videoRef.current?.pause();
   };
   useEffect(() => {
     if (!audioRef.current) return;
@@ -41,8 +40,11 @@ export default function UchihaLogin() {
 
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-cover bg-center text-[#e8b84b]"
+      className={`relative min-h-screen overflow-hidden bg-cover bg-center text-[#e8b84b] ${
+        loading ? "animate-earthquake" : ""
+      }`}
       style={{ backgroundImage: `url(${bg})` }}
+      s
     >
       {/* Page vignette overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_50%_50%,transparent_30%,rgba(0,0,0,0.55)_100%)]" />
@@ -58,11 +60,11 @@ export default function UchihaLogin() {
           style={{ width: "440px", height: "660px", cursor: "pointer" }}
           onMouseEnter={() => {
             setDoorOpen(true);
-            sendCommand("unMute");
+            playVideo();
           }}
           onMouseLeave={() => {
             setDoorOpen(false);
-            sendCommand("mute");
+            pauseVideo();
           }}
         >
           {/* Left panel */}
@@ -187,19 +189,18 @@ export default function UchihaLogin() {
               borderRadius: "2px",
             }}
           >
-            <iframe
-              ref={iframeRef}
-              title="uchiha-video"
-              src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`}
-              allow="autoplay; fullscreen"
-              frameBorder="0"
+            <video
+              ref={videoRef}
+              src={stormVideo}
+              loop
+              playsInline
+              preload="auto"
               style={{
                 position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "477.78%",
-                height: "477.78%",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
                 pointerEvents: "none",
               }}
             />
