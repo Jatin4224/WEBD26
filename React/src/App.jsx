@@ -31,6 +31,14 @@ import Character from "./components/Character";
 import UchihaLogin from "./components/UchihaLogin";
 import CodeSnippetLogin from "./components/Svg";
 import RaccoonAssistant from "./components/RacoonAi";
+import ObitoAssistant from "./components/Obito";
+import ObitoChatInterface from "./components/ObitoInterface";
+import ObitoFormBuilder from "./components/ObitoBuilder";
+import RaccoonChat from "./components/RacoonChat";
+import UchihaFormBuilder from "./components/ObitoForm";
+import GuidedFormBuilder from "./components/ObitoForm";
+import SenseiSelection from "./components/SenseiSelection";
+import FrameCharacter from "./components/Button";
 
 const App = () => {
   return (
@@ -64,7 +72,14 @@ const App = () => {
         <UchihaLogin />
         <House /> */}
         {/* <CodeSnippetLogin /> */}
-        <RaccoonAssistant />
+        {/* <RaccoonAssistant /> */}
+        {/* <ObitoAssistant />
+        <ObitoChatInterface />
+        <ObitoFormBuilder /> */}
+        {/* <RaccoonChat /> */}
+        {/* <GuidedFormBuilder /> */}
+        {/* <SenseiSelection /> */}
+        <FrameCharacter />
       </div>
     </>
   );
