@@ -1,0 +1,6 @@
+import type { LanguageModelV2 } from "@ai-sdk/provider";
+export declare const wrapAISDKModel: (model: LanguageModelV2, options?: {
+    tracing?: boolean;
+    caching?: boolean;
+}) => LanguageModelV2;
+//# sourceMappingURL=ai-sdk.d.ts.map

@@ -1,0 +1,1534 @@
+var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
+    if (value !== null && value !== void 0) {
+        if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
+        var dispose, inner;
+        if (async) {
+            if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+            dispose = value[Symbol.asyncDispose];
+        }
+        if (dispose === void 0) {
+            if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+            dispose = value[Symbol.dispose];
+            if (async) inner = dispose;
+        }
+        if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
+        env.stack.push({ value: value, dispose: dispose, async: async });
+    }
+    else if (async) {
+        env.stack.push({ async: true });
+    }
+    return value;
+};
+var __disposeResources = (this && this.__disposeResources) || (function (SuppressedError) {
+    return function (env) {
+        function fail(e) {
+            env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+            env.hasError = true;
+        }
+        var r, s = 0;
+        function next() {
+            while (r = env.stack.pop()) {
+                try {
+                    if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                    if (r.dispose) {
+                        var result = r.dispose.call(r.value);
+                        if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    }
+                    else s |= 1;
+                }
+                catch (e) {
+                    fail(e);
+                }
+            }
+            if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
+            if (env.hasError) throw env.error;
+        }
+        return next();
+    };
+})(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+});
+import { describe, expect } from "vitest";
+import { testAllStorage } from "./test-utils.js";
+describe("Evalite.Storage", () => {
+    describe("runs", () => {
+        testAllStorage("creates run with full runType", async (getStorage) => {
+            const env_1 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_1, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                expect(run.id).toBeDefined();
+                expect(run.runType).toBe("full");
+                expect(run.created_at).toBeDefined();
+            }
+            catch (e_1) {
+                env_1.error = e_1;
+                env_1.hasError = true;
+            }
+            finally {
+                const result_1 = __disposeResources(env_1);
+                if (result_1)
+                    await result_1;
+            }
+        });
+        testAllStorage("getMany returns all runs", async (getStorage) => {
+            const env_2 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_2, await getStorage(), true);
+                const run1 = await storage.runs.create({ runType: "full" });
+                const run2 = await storage.runs.create({ runType: "partial" });
+                const runs = await storage.runs.getMany();
+                expect(runs).toHaveLength(2);
+                expect(runs.map((r) => r.id)).toContain(run1.id);
+                expect(runs.map((r) => r.id)).toContain(run2.id);
+            }
+            catch (e_2) {
+                env_2.error = e_2;
+                env_2.hasError = true;
+            }
+            finally {
+                const result_2 = __disposeResources(env_2);
+                if (result_2)
+                    await result_2;
+            }
+        });
+        testAllStorage("getMany filters by ids", async (getStorage) => {
+            const env_3 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_3, await getStorage(), true);
+                const run1 = await storage.runs.create({ runType: "full" });
+                await storage.runs.create({ runType: "partial" });
+                const runs = await storage.runs.getMany({ ids: [run1.id] });
+                expect(runs).toHaveLength(1);
+                expect(runs[0].id).toBe(run1.id);
+            }
+            catch (e_3) {
+                env_3.error = e_3;
+                env_3.hasError = true;
+            }
+            finally {
+                const result_3 = __disposeResources(env_3);
+                if (result_3)
+                    await result_3;
+            }
+        });
+        testAllStorage("getMany filters by runType", async (getStorage) => {
+            const env_4 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_4, await getStorage(), true);
+                await storage.runs.create({ runType: "full" });
+                await storage.runs.create({ runType: "partial" });
+                await storage.runs.create({ runType: "full" });
+                const runs = await storage.runs.getMany({ runType: "full" });
+                expect(runs).toHaveLength(2);
+                expect(runs.every((r) => r.runType === "full")).toBe(true);
+            }
+            catch (e_4) {
+                env_4.error = e_4;
+                env_4.hasError = true;
+            }
+            finally {
+                const result_4 = __disposeResources(env_4);
+                if (result_4)
+                    await result_4;
+            }
+        });
+        testAllStorage("getMany respects limit", async (getStorage) => {
+            const env_5 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_5, await getStorage(), true);
+                await storage.runs.create({ runType: "full" });
+                await storage.runs.create({ runType: "full" });
+                await storage.runs.create({ runType: "full" });
+                const runs = await storage.runs.getMany({ limit: 2 });
+                expect(runs).toHaveLength(2);
+            }
+            catch (e_5) {
+                env_5.error = e_5;
+                env_5.hasError = true;
+            }
+            finally {
+                const result_5 = __disposeResources(env_5);
+                if (result_5)
+                    await result_5;
+            }
+        });
+        testAllStorage("getMany respects orderBy and orderDirection", async (getStorage) => {
+            const env_6 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_6, await getStorage(), true);
+                const run1 = await storage.runs.create({ runType: "full" });
+                await storage.runs.create({ runType: "full" });
+                const run3 = await storage.runs.create({ runType: "full" });
+                const runsDesc = await storage.runs.getMany({
+                    orderBy: "id",
+                    orderDirection: "desc",
+                });
+                expect(runsDesc[0].id).toBe(run3.id);
+                expect(runsDesc[2].id).toBe(run1.id);
+                const runsAsc = await storage.runs.getMany({
+                    orderBy: "id",
+                    orderDirection: "asc",
+                });
+                expect(runsAsc[0].id).toBe(run1.id);
+                expect(runsAsc[2].id).toBe(run3.id);
+            }
+            catch (e_6) {
+                env_6.error = e_6;
+                env_6.hasError = true;
+            }
+            finally {
+                const result_6 = __disposeResources(env_6);
+                if (result_6)
+                    await result_6;
+            }
+        });
+    });
+    describe("suites", () => {
+        testAllStorage("create creates new suite", async (getStorage) => {
+            const env_7 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_7, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                expect(suite1.id).toBeDefined();
+                expect(suite1.run_id).toBe(run.id);
+                expect(suite1.name).toBe("test-eval");
+                expect(suite1.filepath).toBe("/test/path.eval.ts");
+                expect(suite1.status).toBe("running");
+                expect(suite1.created_at).toBeDefined();
+            }
+            catch (e_7) {
+                env_7.error = e_7;
+                env_7.hasError = true;
+            }
+            finally {
+                const result_7 = __disposeResources(env_7);
+                if (result_7)
+                    await result_7;
+            }
+        });
+        testAllStorage("create always creates new suite", async (getStorage) => {
+            const env_8 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_8, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-suite",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suite2 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-suite",
+                    filepath: "/test/path.eval.ts",
+                });
+                expect(suite2.id).not.toBe(suite1.id);
+            }
+            catch (e_8) {
+                env_8.error = e_8;
+                env_8.hasError = true;
+            }
+            finally {
+                const result_8 = __disposeResources(env_8);
+                if (result_8)
+                    await result_8;
+            }
+        });
+        testAllStorage("create handles variantName and variantGroup", async (getStorage) => {
+            const env_9 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_9, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                    variantName: "variant-a",
+                    variantGroup: "experiment-1",
+                });
+                expect(suite1.variant_name).toBe("variant-a");
+                expect(suite1.variant_group).toBe("experiment-1");
+            }
+            catch (e_9) {
+                env_9.error = e_9;
+                env_9.hasError = true;
+            }
+            finally {
+                const result_9 = __disposeResources(env_9);
+                if (result_9)
+                    await result_9;
+            }
+        });
+        testAllStorage("update changes suite status", async (getStorage) => {
+            const env_10 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_10, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const updated = await storage.suites.update({
+                    id: suite1.id,
+                    status: "success",
+                });
+                expect(updated.status).toBe("success");
+            }
+            catch (e_10) {
+                env_10.error = e_10;
+                env_10.hasError = true;
+            }
+            finally {
+                const result_10 = __disposeResources(env_10);
+                if (result_10)
+                    await result_10;
+            }
+        });
+        testAllStorage("getMany returns all suites", async (getStorage) => {
+            const env_11 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_11, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path1.eval.ts",
+                });
+                const suite2 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path2.eval.ts",
+                });
+                const suites = await storage.suites.getMany();
+                expect(suites).toHaveLength(2);
+                expect(suites.map((s) => s.id)).toContain(suite1.id);
+                expect(suites.map((s) => s.id)).toContain(suite2.id);
+            }
+            catch (e_11) {
+                env_11.error = e_11;
+                env_11.hasError = true;
+            }
+            finally {
+                const result_11 = __disposeResources(env_11);
+                if (result_11)
+                    await result_11;
+            }
+        });
+        testAllStorage("getMany filters by ids", async (getStorage) => {
+            const env_12 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_12, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path1.eval.ts",
+                });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path2.eval.ts",
+                });
+                const suites = await storage.suites.getMany({ ids: [suite1.id] });
+                expect(suites).toHaveLength(1);
+                expect(suites[0].id).toBe(suite1.id);
+            }
+            catch (e_12) {
+                env_12.error = e_12;
+                env_12.hasError = true;
+            }
+            finally {
+                const result_12 = __disposeResources(env_12);
+                if (result_12)
+                    await result_12;
+            }
+        });
+        testAllStorage("getMany filters by runIds", async (getStorage) => {
+            const env_13 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_13, await getStorage(), true);
+                const run1 = await storage.runs.create({ runType: "full" });
+                const run2 = await storage.runs.create({ runType: "full" });
+                await storage.suites.create({
+                    runId: run1.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suite2 = await storage.suites.create({
+                    runId: run2.id,
+                    name: "suite-2",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suites = await storage.suites.getMany({ runIds: [run2.id] });
+                expect(suites).toHaveLength(1);
+                expect(suites[0].id).toBe(suite2.id);
+            }
+            catch (e_13) {
+                env_13.error = e_13;
+                env_13.hasError = true;
+            }
+            finally {
+                const result_13 = __disposeResources(env_13);
+                if (result_13)
+                    await result_13;
+            }
+        });
+        testAllStorage("getMany filters by name", async (getStorage) => {
+            const env_14 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_14, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suite2 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suites = await storage.suites.getMany({ name: "suite-2" });
+                expect(suites).toHaveLength(1);
+                expect(suites[0].id).toBe(suite2.id);
+            }
+            catch (e_14) {
+                env_14.error = e_14;
+                env_14.hasError = true;
+            }
+            finally {
+                const result_14 = __disposeResources(env_14);
+                if (result_14)
+                    await result_14;
+            }
+        });
+        testAllStorage("getMany filters by statuses", async (getStorage) => {
+            const env_15 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_15, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path.eval.ts",
+                });
+                // Create result so suite can be updated
+                await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                await storage.suites.update({ id: suite1.id, status: "success" });
+                const suites = await storage.suites.getMany({ statuses: ["success"] });
+                expect(suites).toHaveLength(1);
+                expect(suites[0].id).toBe(suite1.id);
+            }
+            catch (e_15) {
+                env_15.error = e_15;
+                env_15.hasError = true;
+            }
+            finally {
+                const result_15 = __disposeResources(env_15);
+                if (result_15)
+                    await result_15;
+            }
+        });
+        testAllStorage("getMany respects limit", async (getStorage) => {
+            const env_16 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_16, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path.eval.ts",
+                });
+                await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-3",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suites = await storage.suites.getMany({ limit: 2 });
+                expect(suites).toHaveLength(2);
+            }
+            catch (e_16) {
+                env_16.error = e_16;
+                env_16.hasError = true;
+            }
+            finally {
+                const result_16 = __disposeResources(env_16);
+                if (result_16)
+                    await result_16;
+            }
+        });
+    });
+    describe("evals", () => {
+        testAllStorage("create creates new eval", async (getStorage) => {
+            const env_17 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_17, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: { test: "input" },
+                    expected: { test: "expected" },
+                    output: { test: "output" },
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [{ label: "col1", value: "val1" }],
+                });
+                expect(_eval.id).toBeDefined();
+                expect(_eval.suite_id).toBe(suite1.id);
+                expect(_eval.col_order).toBe(0);
+                expect(_eval.input).toEqual({ test: "input" });
+                expect(_eval.expected).toEqual({ test: "expected" });
+                expect(_eval.output).toEqual({ test: "output" });
+                expect(_eval.duration).toBe(100);
+                expect(_eval.status).toBe("success");
+                expect(_eval.rendered_columns).toEqual([
+                    { label: "col1", value: "val1" },
+                ]);
+                expect(_eval.created_at).toBeDefined();
+            }
+            catch (e_17) {
+                env_17.error = e_17;
+                env_17.hasError = true;
+            }
+            finally {
+                const result_17 = __disposeResources(env_17);
+                if (result_17)
+                    await result_17;
+            }
+        });
+        testAllStorage("update updates eval", async (getStorage) => {
+            const env_18 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_18, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: { test: "input" },
+                    expected: { test: "expected" },
+                    output: { test: "output" },
+                    duration: 100,
+                    status: "running",
+                    renderedColumns: [],
+                });
+                const updated = await storage.evals.update({
+                    id: _eval.id,
+                    output: { test: "new output" },
+                    duration: 200,
+                    input: { test: "new input" },
+                    expected: { test: "new expected" },
+                    status: "success",
+                    renderedColumns: [{ label: "col1", value: "val1" }],
+                });
+                expect(updated.output).toEqual({ test: "new output" });
+                expect(updated.duration).toBe(200);
+                expect(updated.input).toEqual({ test: "new input" });
+                expect(updated.expected).toEqual({ test: "new expected" });
+                expect(updated.status).toBe("success");
+                expect(updated.rendered_columns).toEqual([
+                    { label: "col1", value: "val1" },
+                ]);
+            }
+            catch (e_18) {
+                env_18.error = e_18;
+                env_18.hasError = true;
+            }
+            finally {
+                const result_18 = __disposeResources(env_18);
+                if (result_18)
+                    await result_18;
+            }
+        });
+        testAllStorage("getMany returns all evals", async (getStorage) => {
+            const env_19 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_19, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const results = await storage.evals.getMany();
+                expect(results).toHaveLength(2);
+                expect(results.map((r) => r.id)).toContain(_eval1.id);
+                expect(results.map((r) => r.id)).toContain(_eval2.id);
+            }
+            catch (e_19) {
+                env_19.error = e_19;
+                env_19.hasError = true;
+            }
+            finally {
+                const result_19 = __disposeResources(env_19);
+                if (result_19)
+                    await result_19;
+            }
+        });
+        testAllStorage("getMany filters by ids", async (getStorage) => {
+            const env_20 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_20, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const evals = await storage.evals.getMany({ ids: [_eval1.id] });
+                expect(evals).toHaveLength(1);
+                expect(evals[0].id).toBe(_eval1.id);
+            }
+            catch (e_20) {
+                env_20.error = e_20;
+                env_20.hasError = true;
+            }
+            finally {
+                const result_20 = __disposeResources(env_20);
+                if (result_20)
+                    await result_20;
+            }
+        });
+        testAllStorage("getMany filters by suiteIds", async (getStorage) => {
+            const env_21 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_21, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const suite2 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-2",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite2.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const results = await storage.evals.getMany({ suiteIds: [suite2.id] });
+                expect(results).toHaveLength(1);
+                expect(results[0].id).toBe(_eval2.id);
+            }
+            catch (e_21) {
+                env_21.error = e_21;
+                env_21.hasError = true;
+            }
+            finally {
+                const result_21 = __disposeResources(env_21);
+                if (result_21)
+                    await result_21;
+            }
+        });
+        testAllStorage("getMany filters by order", async (getStorage) => {
+            const env_22 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_22, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const results = await storage.evals.getMany({ order: 1 });
+                expect(results).toHaveLength(1);
+                expect(results[0].id).toBe(_eval2.id);
+            }
+            catch (e_22) {
+                env_22.error = e_22;
+                env_22.hasError = true;
+            }
+            finally {
+                const result_22 = __disposeResources(env_22);
+                if (result_22)
+                    await result_22;
+            }
+        });
+        testAllStorage("getMany filters by statuses", async (getStorage) => {
+            const env_23 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_23, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "fail",
+                    renderedColumns: [],
+                });
+                const results = await storage.evals.getMany({ statuses: ["success"] });
+                expect(results).toHaveLength(1);
+                expect(results[0].id).toBe(_eval1.id);
+            }
+            catch (e_23) {
+                env_23.error = e_23;
+                env_23.hasError = true;
+            }
+            finally {
+                const result_23 = __disposeResources(env_23);
+                if (result_23)
+                    await result_23;
+            }
+        });
+    });
+    describe("scores", () => {
+        testAllStorage("create creates new score", async (getStorage) => {
+            const env_24 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_24, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const result = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const score = await storage.scores.create({
+                    evalId: result.id,
+                    name: "accuracy",
+                    score: 0.95,
+                    description: "Accuracy score",
+                    metadata: { key: "value" },
+                });
+                expect(score.id).toBeDefined();
+                expect(score.eval_id).toBe(result.id);
+                expect(score.name).toBe("accuracy");
+                expect(score.score).toBe(0.95);
+                expect(score.description).toBe("Accuracy score");
+                expect(score.metadata).toEqual({ key: "value" });
+                expect(score.created_at).toBeDefined();
+            }
+            catch (e_24) {
+                env_24.error = e_24;
+                env_24.hasError = true;
+            }
+            finally {
+                const result_24 = __disposeResources(env_24);
+                if (result_24)
+                    await result_24;
+            }
+        });
+        testAllStorage("create handles optional description", async (getStorage) => {
+            const env_25 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_25, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "test-eval",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const score = await storage.scores.create({
+                    evalId: _eval.id,
+                    name: "accuracy",
+                    score: 0.95,
+                    metadata: null,
+                });
+                // SQLite returns null for undefined optional fields
+                expect(score.description == null).toBe(true);
+            }
+            catch (e_25) {
+                env_25.error = e_25;
+                env_25.hasError = true;
+            }
+            finally {
+                const result_25 = __disposeResources(env_25);
+                if (result_25)
+                    await result_25;
+            }
+        });
+        testAllStorage("getMany returns all scores", async (getStorage) => {
+            const env_26 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_26, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const score1 = await storage.scores.create({
+                    evalId: _eval.id,
+                    name: "score-1",
+                    score: 0.8,
+                    metadata: null,
+                });
+                const score2 = await storage.scores.create({
+                    evalId: _eval.id,
+                    name: "score-2",
+                    score: 0.6,
+                    metadata: null,
+                });
+                const scores = await storage.scores.getMany();
+                expect(scores).toHaveLength(2);
+                expect(scores.map((s) => s.id)).toContain(score1.id);
+                expect(scores.map((s) => s.id)).toContain(score2.id);
+            }
+            catch (e_26) {
+                env_26.error = e_26;
+                env_26.hasError = true;
+            }
+            finally {
+                const result_26 = __disposeResources(env_26);
+                if (result_26)
+                    await result_26;
+            }
+        });
+        testAllStorage("getMany filters by ids", async (getStorage) => {
+            const env_27 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_27, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const score1 = await storage.scores.create({
+                    evalId: _eval.id,
+                    name: "score-1",
+                    score: 0.8,
+                    metadata: null,
+                });
+                await storage.scores.create({
+                    evalId: _eval.id,
+                    name: "score-2",
+                    score: 0.6,
+                    metadata: null,
+                });
+                const scores = await storage.scores.getMany({ ids: [score1.id] });
+                expect(scores).toHaveLength(1);
+                expect(scores[0].id).toBe(score1.id);
+            }
+            catch (e_27) {
+                env_27.error = e_27;
+                env_27.hasError = true;
+            }
+            finally {
+                const result_27 = __disposeResources(env_27);
+                if (result_27)
+                    await result_27;
+            }
+        });
+        testAllStorage("getMany filters by resultIds", async (getStorage) => {
+            const env_28 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_28, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                await storage.scores.create({
+                    evalId: _eval1.id,
+                    name: "score-1",
+                    score: 0.8,
+                    metadata: null,
+                });
+                const score2 = await storage.scores.create({
+                    evalId: _eval2.id,
+                    name: "score-2",
+                    score: 0.6,
+                    metadata: null,
+                });
+                const scores = await storage.scores.getMany({ evalIds: [_eval2.id] });
+                expect(scores).toHaveLength(1);
+                expect(scores[0].id).toBe(score2.id);
+            }
+            catch (e_28) {
+                env_28.error = e_28;
+                env_28.hasError = true;
+            }
+            finally {
+                const result_28 = __disposeResources(env_28);
+                if (result_28)
+                    await result_28;
+            }
+        });
+    });
+    describe("traces", () => {
+        testAllStorage("create creates new trace", async (getStorage) => {
+            const env_29 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_29, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const trace = await storage.traces.create({
+                    evalId: _eval.id,
+                    input: [{ role: "user", content: "test" }],
+                    output: "response",
+                    start: 1000,
+                    end: 2000,
+                    inputTokens: 10,
+                    outputTokens: 20,
+                    totalTokens: 30,
+                    order: 0,
+                });
+                expect(trace.id).toBeDefined();
+                expect(trace.eval_id).toBe(_eval.id);
+                expect(trace.input).toEqual([{ role: "user", content: "test" }]);
+                expect(trace.output).toBe("response");
+                expect(trace.start_time).toBe(1000);
+                expect(trace.end_time).toBe(2000);
+                expect(trace.input_tokens).toBe(10);
+                expect(trace.output_tokens).toBe(20);
+                expect(trace.total_tokens).toBe(30);
+                expect(trace.col_order).toBe(0);
+            }
+            catch (e_29) {
+                env_29.error = e_29;
+                env_29.hasError = true;
+            }
+            finally {
+                const result_29 = __disposeResources(env_29);
+                if (result_29)
+                    await result_29;
+            }
+        });
+        testAllStorage("create handles optional token fields", async (getStorage) => {
+            const env_30 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_30, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const trace = await storage.traces.create({
+                    evalId: _eval.id,
+                    input: "test input",
+                    output: "test output",
+                    start: 1000,
+                    end: 2000,
+                    order: 0,
+                });
+                // SQLite returns null for undefined optional fields
+                expect(trace.input_tokens == null).toBe(true);
+                expect(trace.output_tokens == null).toBe(true);
+                expect(trace.total_tokens == null).toBe(true);
+            }
+            catch (e_30) {
+                env_30.error = e_30;
+                env_30.hasError = true;
+            }
+            finally {
+                const result_30 = __disposeResources(env_30);
+                if (result_30)
+                    await result_30;
+            }
+        });
+        testAllStorage("getMany returns all traces", async (getStorage) => {
+            const env_31 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_31, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const trace1 = await storage.traces.create({
+                    evalId: _eval.id,
+                    input: "input1",
+                    output: "output1",
+                    start: 1000,
+                    end: 2000,
+                    order: 0,
+                });
+                const trace2 = await storage.traces.create({
+                    evalId: _eval.id,
+                    input: "input2",
+                    output: "output2",
+                    start: 2000,
+                    end: 3000,
+                    order: 1,
+                });
+                const traces = await storage.traces.getMany();
+                expect(traces).toHaveLength(2);
+                expect(traces.map((t) => t.id)).toContain(trace1.id);
+                expect(traces.map((t) => t.id)).toContain(trace2.id);
+            }
+            catch (e_31) {
+                env_31.error = e_31;
+                env_31.hasError = true;
+            }
+            finally {
+                const result_31 = __disposeResources(env_31);
+                if (result_31)
+                    await result_31;
+            }
+        });
+        testAllStorage("getMany filters by ids", async (getStorage) => {
+            const env_32 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_32, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const trace1 = await storage.traces.create({
+                    evalId: _eval.id,
+                    input: "input1",
+                    output: "output1",
+                    start: 1000,
+                    end: 2000,
+                    order: 0,
+                });
+                await storage.traces.create({
+                    evalId: _eval.id,
+                    input: "input2",
+                    output: "output2",
+                    start: 2000,
+                    end: 3000,
+                    order: 1,
+                });
+                const traces = await storage.traces.getMany({ ids: [trace1.id] });
+                expect(traces).toHaveLength(1);
+                expect(traces[0].id).toBe(trace1.id);
+            }
+            catch (e_32) {
+                env_32.error = e_32;
+                env_32.hasError = true;
+            }
+            finally {
+                const result_32 = __disposeResources(env_32);
+                if (result_32)
+                    await result_32;
+            }
+        });
+        testAllStorage("getMany filters by resultIds", async (getStorage) => {
+            const env_33 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_33, await getStorage(), true);
+                const run = await storage.runs.create({ runType: "full" });
+                const suite1 = await storage.suites.create({
+                    runId: run.id,
+                    name: "suite-1",
+                    filepath: "/test/path.eval.ts",
+                });
+                const _eval1 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 0,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                const _eval2 = await storage.evals.create({
+                    suiteId: suite1.id,
+                    order: 1,
+                    input: {},
+                    expected: {},
+                    output: {},
+                    duration: 100,
+                    status: "success",
+                    renderedColumns: [],
+                });
+                await storage.traces.create({
+                    evalId: _eval1.id,
+                    input: "input1",
+                    output: "output1",
+                    start: 1000,
+                    end: 2000,
+                    order: 0,
+                });
+                const trace2 = await storage.traces.create({
+                    evalId: _eval2.id,
+                    input: "input2",
+                    output: "output2",
+                    start: 2000,
+                    end: 3000,
+                    order: 0,
+                });
+                const traces = await storage.traces.getMany({ evalIds: [_eval2.id] });
+                expect(traces).toHaveLength(1);
+                expect(traces[0].id).toBe(trace2.id);
+            }
+            catch (e_33) {
+                env_33.error = e_33;
+                env_33.hasError = true;
+            }
+            finally {
+                const result_33 = __disposeResources(env_33);
+                if (result_33)
+                    await result_33;
+            }
+        });
+    });
+    describe("cache", () => {
+        testAllStorage("set and get - stores and retrieves value", async (getStorage) => {
+            const env_34 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_34, await getStorage(), true);
+                const keyHash = "test-key-hash";
+                const data = {
+                    value: { foo: "bar", nested: { count: 42 } },
+                    duration: 1500,
+                };
+                await storage.cache.set(keyHash, data);
+                const result = await storage.cache.get(keyHash);
+                expect(result).not.toBeNull();
+                expect(result?.value).toEqual(data.value);
+                expect(result?.duration).toBe(data.duration);
+            }
+            catch (e_34) {
+                env_34.error = e_34;
+                env_34.hasError = true;
+            }
+            finally {
+                const result_34 = __disposeResources(env_34);
+                if (result_34)
+                    await result_34;
+            }
+        });
+        testAllStorage("get returns null for non-existent key", async (getStorage) => {
+            const env_35 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_35, await getStorage(), true);
+                const result = await storage.cache.get("non-existent-key");
+                expect(result).toBeNull();
+            }
+            catch (e_35) {
+                env_35.error = e_35;
+                env_35.hasError = true;
+            }
+            finally {
+                const result_35 = __disposeResources(env_35);
+                if (result_35)
+                    await result_35;
+            }
+        });
+        testAllStorage("set overwrites existing value", async (getStorage) => {
+            const env_36 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_36, await getStorage(), true);
+                const keyHash = "overwrite-key";
+                await storage.cache.set(keyHash, { value: "first", duration: 100 });
+                await storage.cache.set(keyHash, { value: "second", duration: 200 });
+                const result = await storage.cache.get(keyHash);
+                expect(result?.value).toBe("second");
+                expect(result?.duration).toBe(200);
+            }
+            catch (e_36) {
+                env_36.error = e_36;
+                env_36.hasError = true;
+            }
+            finally {
+                const result_36 = __disposeResources(env_36);
+                if (result_36)
+                    await result_36;
+            }
+        });
+        testAllStorage("delete removes specific entry", async (getStorage) => {
+            const env_37 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_37, await getStorage(), true);
+                const keyHash = "delete-key";
+                await storage.cache.set(keyHash, { value: "test", duration: 100 });
+                await storage.cache.delete(keyHash);
+                const result = await storage.cache.get(keyHash);
+                expect(result).toBeNull();
+            }
+            catch (e_37) {
+                env_37.error = e_37;
+                env_37.hasError = true;
+            }
+            finally {
+                const result_37 = __disposeResources(env_37);
+                if (result_37)
+                    await result_37;
+            }
+        });
+        testAllStorage("delete is idempotent (doesn't error on missing key)", async (getStorage) => {
+            const env_38 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_38, await getStorage(), true);
+                await expect(storage.cache.delete("non-existent")).resolves.not.toThrow();
+            }
+            catch (e_38) {
+                env_38.error = e_38;
+                env_38.hasError = true;
+            }
+            finally {
+                const result_38 = __disposeResources(env_38);
+                if (result_38)
+                    await result_38;
+            }
+        });
+        testAllStorage("clear removes all entries", async (getStorage) => {
+            const env_39 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_39, await getStorage(), true);
+                await storage.cache.set("key1", { value: "value1", duration: 100 });
+                await storage.cache.set("key2", { value: "value2", duration: 200 });
+                await storage.cache.set("key3", { value: "value3", duration: 300 });
+                await storage.cache.clear();
+                const result1 = await storage.cache.get("key1");
+                const result2 = await storage.cache.get("key2");
+                const result3 = await storage.cache.get("key3");
+                expect(result1).toBeNull();
+                expect(result2).toBeNull();
+                expect(result3).toBeNull();
+            }
+            catch (e_39) {
+                env_39.error = e_39;
+                env_39.hasError = true;
+            }
+            finally {
+                const result_39 = __disposeResources(env_39);
+                if (result_39)
+                    await result_39;
+            }
+        });
+        testAllStorage("handles complex JSON values", async (getStorage) => {
+            const env_40 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_40, await getStorage(), true);
+                const keyHash = "complex-json";
+                const complexValue = {
+                    string: "test",
+                    number: 42,
+                    boolean: true,
+                    null: null,
+                    array: [1, 2, 3, { nested: "value" }],
+                    nested: {
+                        deep: {
+                            structure: {
+                                value: "deep",
+                            },
+                        },
+                    },
+                };
+                await storage.cache.set(keyHash, { value: complexValue, duration: 500 });
+                const result = await storage.cache.get(keyHash);
+                expect(result?.value).toEqual(complexValue);
+            }
+            catch (e_40) {
+                env_40.error = e_40;
+                env_40.hasError = true;
+            }
+            finally {
+                const result_40 = __disposeResources(env_40);
+                if (result_40)
+                    await result_40;
+            }
+        });
+        testAllStorage("handles empty objects and arrays", async (getStorage) => {
+            const env_41 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_41, await getStorage(), true);
+                await storage.cache.set("empty-obj", { value: {}, duration: 100 });
+                await storage.cache.set("empty-arr", { value: [], duration: 100 });
+                const obj = await storage.cache.get("empty-obj");
+                const arr = await storage.cache.get("empty-arr");
+                expect(obj?.value).toEqual({});
+                expect(arr?.value).toEqual([]);
+            }
+            catch (e_41) {
+                env_41.error = e_41;
+                env_41.hasError = true;
+            }
+            finally {
+                const result_41 = __disposeResources(env_41);
+                if (result_41)
+                    await result_41;
+            }
+        });
+        testAllStorage("stores duration as number with decimals", async (getStorage) => {
+            const env_42 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_42, await getStorage(), true);
+                const keyHash = "duration-test";
+                const duration = 1234.5678;
+                await storage.cache.set(keyHash, { value: "test", duration });
+                const result = await storage.cache.get(keyHash);
+                expect(result?.duration).toBe(duration);
+            }
+            catch (e_42) {
+                env_42.error = e_42;
+                env_42.hasError = true;
+            }
+            finally {
+                const result_42 = __disposeResources(env_42);
+                if (result_42)
+                    await result_42;
+            }
+        });
+        testAllStorage("different keys store independently", async (getStorage) => {
+            const env_43 = { stack: [], error: void 0, hasError: false };
+            try {
+                const storage = __addDisposableResource(env_43, await getStorage(), true);
+                await storage.cache.set("key1", { value: "value1", duration: 100 });
+                await storage.cache.set("key2", { value: "value2", duration: 200 });
+                const result1 = await storage.cache.get("key1");
+                const result2 = await storage.cache.get("key2");
+                expect(result1?.value).toBe("value1");
+                expect(result1?.duration).toBe(100);
+                expect(result2?.value).toBe("value2");
+                expect(result2?.duration).toBe(200);
+            }
+            catch (e_43) {
+                env_43.error = e_43;
+                env_43.hasError = true;
+            }
+            finally {
+                const result_43 = __disposeResources(env_43);
+                if (result_43)
+                    await result_43;
+            }
+        });
+    });
+    describe("lifecycle", () => {
+        testAllStorage("close method works", async (getStorage) => {
+            const storage = await getStorage();
+            await expect(storage.close()).resolves.not.toThrow();
+        });
+        testAllStorage("Symbol.asyncDispose works", async (getStorage) => {
+            const storage = await getStorage();
+            await expect(storage[Symbol.asyncDispose]()).resolves.not.toThrow();
+        });
+    });
+});
+//# sourceMappingURL=storage.test.js.map

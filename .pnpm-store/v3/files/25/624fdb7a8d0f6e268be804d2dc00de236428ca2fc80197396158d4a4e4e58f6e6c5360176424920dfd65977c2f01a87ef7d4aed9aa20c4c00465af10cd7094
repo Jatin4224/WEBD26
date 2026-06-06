@@ -1,0 +1,38 @@
+import type { Evalite } from "../types.js";
+/**
+ * Checks if your AI's answer is correct by comparing
+ * it to a reference answer.
+ *
+ * This scorer does two things:
+ * 1. Checks factual accuracy - breaks both answers
+ *    into claims and verifies your AI's claims match
+ *    the reference (catches hallucinations)
+ * 2. Checks semantic similarity - measures how
+ *    similar the overall meaning is
+ *
+ * The final score combines both. By default,
+ * factual accuracy is 75% and similarity is 25%.
+ *
+ * **When to use**: When you need comprehensive answer
+ * evaluation that balances exact correctness with
+ * semantic equivalence.
+ *
+ * **When NOT to use**: If you only care about exact
+ * facts (use faithfulness), or only semantic
+ * similarity (use answerSimilarity).
+ *
+ * @param opts.question - The question being asked
+ * @param opts.answer - The AI's answer to evaluate
+ * @param opts.reference - Reference answer for comparison (complete, accurate answer)
+ * @param opts.model - Language model to use for evaluation
+ * @param opts.embeddingModel - Embedding model to use for semantic similarity
+ * @param opts.weights - Weights for combining factuality and similarity scores (default: [0.75, 0.25])
+ * @param opts.beta - Beta parameter for F-beta score calculation (default: 1.0). Beta > 1 favors recall, beta < 1 favors precision
+ */
+export declare function answerCorrectness(opts: Evalite.Scorers.AnswerCorrectnessOpts): Promise<{
+    name: string;
+    description: string;
+    score: number;
+    metadata: Evalite.Scorers.AnswerCorrectnessMetadata;
+}>;
+//# sourceMappingURL=answer-correctness.d.ts.map

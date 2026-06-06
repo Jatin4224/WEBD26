@@ -1,0 +1,11 @@
+export declare const sum: <T>(arr: T[], fn: (item: T) => number | undefined) => number;
+export declare const average: <T>(arr: T[], fn: (item: T) => number | undefined) => number;
+export declare const max: <T>(arr: T[], fn: (item: T) => number | undefined) => number;
+import type { Evalite } from "./types.js";
+export declare const EvaliteFile: {
+    fromPath: (path: string) => Evalite.File;
+    isEvaliteFile: (file: unknown) => file is Evalite.File;
+};
+export declare function zip<T, U>(a: T[], b: U[]): [T, U | undefined][];
+export declare function deepEqual(a: unknown, b: unknown): boolean;
+//# sourceMappingURL=utils.d.ts.map

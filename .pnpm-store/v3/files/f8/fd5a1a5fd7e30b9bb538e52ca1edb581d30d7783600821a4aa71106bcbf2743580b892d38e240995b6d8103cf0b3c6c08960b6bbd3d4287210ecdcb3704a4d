@@ -1,0 +1,36 @@
+import type { Evalite } from "../types.js";
+/**
+ * Checks if your retrieval system (like RAG) is
+ * finding the right documents.
+ *
+ * This scorer asks: "Could you answer correctly
+ * using only the documents you retrieved?" It
+ * compares the correct answer to what's in your
+ * retrieved documents.
+ *
+ * Low score = retrieval is missing important info.
+ * High score = you retrieved the right stuff.
+ *
+ * **When to use**: To diagnose and improve your
+ * document retrieval. Helps identify when you're
+ * not fetching relevant documents.
+ *
+ * **When NOT to use**: If you don't have a retrieval
+ * system, or if your AI should use general
+ * knowledge beyond retrieved docs.
+ *
+ * @param opts.question - The question being asked
+ * @param opts.answer - The AI's answer to evaluate (string only, not multi-turn)
+ * @param opts.groundTruth - Array of retrieved context documents/passages
+ * @param opts.model - Language model to use for evaluation
+ */
+export declare function contextRecall(opts: Evalite.Scorers.ContextRecallOpts): Promise<{
+    name: string;
+    description: string;
+    score: number;
+    metadata: {
+        classifications: Evalite.Scorers.ContextRecallClassifications;
+        reason: string;
+    };
+}>;
+//# sourceMappingURL=context-recall.d.ts.map

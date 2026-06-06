@@ -1,0 +1,68 @@
+export const sum = (arr, fn) => {
+    return arr.reduce((a, b) => a + (fn(b) || 0), 0);
+};
+export const average = (arr, fn) => {
+    return sum(arr, fn) / arr.length;
+};
+export const max = (arr, fn) => {
+    return arr.reduce((a, b) => Math.max(a, fn(b) || 0), 0);
+};
+const isEvaliteFile = (file) => {
+    return (typeof file === "object" &&
+        file !== null &&
+        "__EvaliteFile" in file &&
+        file.__EvaliteFile === true);
+};
+export const EvaliteFile = {
+    fromPath: (path) => {
+        return {
+            __EvaliteFile: true,
+            path,
+        };
+    },
+    isEvaliteFile: isEvaliteFile,
+};
+export function zip(a, b) {
+    return a.map((item, index) => [item, b[index]]);
+}
+export function deepEqual(a, b) {
+    if (a === b) {
+        return true;
+    }
+    if (Number.isNaN(a) && Number.isNaN(b)) {
+        return true;
+    }
+    if (a instanceof Date && b instanceof Date) {
+        return a.getTime() === b.getTime();
+    }
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length)
+            return false;
+        for (let i = 0; i < a.length; i++) {
+            if (!deepEqual(a[i], b[i]))
+                return false;
+        }
+        return true;
+    }
+    if (isPlainObject(a) && isPlainObject(b)) {
+        const aKeys = Object.keys(a);
+        const bKeys = Object.keys(b);
+        if (aKeys.length !== bKeys.length)
+            return false;
+        for (const key of aKeys) {
+            if (!Object.prototype.hasOwnProperty.call(b, key))
+                return false;
+            if (!deepEqual(a[key], b[key]))
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+function isPlainObject(value) {
+    if (value === null || typeof value !== "object")
+        return false;
+    const proto = Object.getPrototypeOf(value);
+    return proto === Object.prototype || proto === null;
+}
+//# sourceMappingURL=utils.js.map

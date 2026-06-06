@@ -1,0 +1,5 @@
+import { AsyncLocalStorage } from "async_hooks";
+import type { Evalite } from "./types.js";
+export declare const reportTraceLocalStorage: AsyncLocalStorage<(trace: Evalite.Trace) => void>;
+export declare const reportTrace: (trace: Evalite.Trace) => void;
+//# sourceMappingURL=traces.d.ts.map

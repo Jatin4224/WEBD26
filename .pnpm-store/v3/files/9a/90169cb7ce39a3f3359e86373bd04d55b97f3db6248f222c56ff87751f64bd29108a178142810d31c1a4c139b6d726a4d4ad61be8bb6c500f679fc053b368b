@@ -1,0 +1,26 @@
+import type { Evalite } from "./types.js";
+/**
+ * Options for exporting static UI
+ */
+export interface ExportStaticOptions {
+    /** Storage instance for accessing evaluation data */
+    storage: Evalite.Storage;
+    /** Output directory path for the export */
+    outputPath: string;
+    /** Optional specific run ID to export (defaults to latest full run) */
+    runId?: number;
+    /** Optional base path for hosting at non-root URLs (defaults to "/") */
+    basePath?: string;
+}
+export declare const exportCommand: (opts: {
+    outputPath?: string;
+    runId?: number;
+    basePath?: string;
+    cwd: string;
+    storage: Evalite.Storage;
+}) => Promise<void>;
+/**
+ * Exports the Evalite UI as a static bundle with pre-computed JSON files
+ */
+export declare const exportStaticUI: (options: ExportStaticOptions) => Promise<void>;
+//# sourceMappingURL=export-static.d.ts.map

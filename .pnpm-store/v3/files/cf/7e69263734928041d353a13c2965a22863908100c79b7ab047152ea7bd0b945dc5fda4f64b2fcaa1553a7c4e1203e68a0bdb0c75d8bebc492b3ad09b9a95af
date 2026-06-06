@@ -1,0 +1,320 @@
+export class InMemoryStorage {
+    runsStore = new Map();
+    suitesStore = new Map();
+    evalsStore = new Map();
+    scoresStore = new Map();
+    tracesStore = new Map();
+    cacheStore = new Map();
+    nextRunId = 1;
+    nextSuiteId = 1;
+    nextEvalId = 1;
+    nextScoreId = 1;
+    nextTraceId = 1;
+    constructor() { }
+    /**
+     * Create a new in-memory storage
+     */
+    static create() {
+        return new InMemoryStorage();
+    }
+    runs = {
+        create: async (opts) => {
+            const run = {
+                id: this.nextRunId++,
+                runType: opts.runType,
+                created_at: new Date().toISOString(),
+            };
+            this.runsStore.set(run.id, run);
+            return run;
+        },
+        getMany: async (opts) => {
+            let runs = Array.from(this.runsStore.values());
+            if (opts?.ids && opts.ids.length > 0) {
+                runs = runs.filter((r) => opts.ids.includes(r.id));
+            }
+            if (opts?.runType) {
+                runs = runs.filter((r) => r.runType === opts.runType);
+            }
+            if (opts?.createdAt) {
+                runs = runs.filter((r) => r.created_at === opts.createdAt);
+            }
+            if (opts?.createdAfter) {
+                runs = runs.filter((r) => r.created_at > opts.createdAfter);
+            }
+            if (opts?.createdBefore) {
+                runs = runs.filter((r) => r.created_at < opts.createdBefore);
+            }
+            const orderBy = opts?.orderBy ?? "created_at";
+            const orderDirection = opts?.orderDirection ?? "desc";
+            runs.sort((a, b) => {
+                const aVal = a[orderBy];
+                const bVal = b[orderBy];
+                const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                return orderDirection === "desc" ? -comparison : comparison;
+            });
+            if (opts?.limit) {
+                runs = runs.slice(0, opts.limit);
+            }
+            return runs;
+        },
+    };
+    suites = {
+        create: async (opts) => {
+            const suite = {
+                id: this.nextSuiteId++,
+                run_id: opts.runId,
+                name: opts.name,
+                filepath: opts.filepath,
+                variant_name: opts.variantName,
+                variant_group: opts.variantGroup,
+                status: "running",
+                duration: 0,
+                created_at: new Date().toISOString(),
+            };
+            this.suitesStore.set(suite.id, suite);
+            return suite;
+        },
+        update: async (opts) => {
+            const suite = this.suitesStore.get(opts.id);
+            if (!suite) {
+                throw new Error(`Eval with id ${opts.id} not found`);
+            }
+            const updated = {
+                ...suite,
+                status: opts.status,
+                duration: 0,
+            };
+            this.suitesStore.set(opts.id, updated);
+            return updated;
+        },
+        getMany: async (opts) => {
+            let suites = Array.from(this.suitesStore.values());
+            if (opts?.ids && opts.ids.length > 0) {
+                suites = suites.filter((e) => opts.ids.includes(e.id));
+            }
+            if (opts?.runIds && opts.runIds.length > 0) {
+                suites = suites.filter((e) => opts.runIds.includes(e.run_id));
+            }
+            if (opts?.name) {
+                suites = suites.filter((e) => e.name === opts.name);
+            }
+            if (opts?.statuses && opts.statuses.length > 0) {
+                suites = suites.filter((e) => opts.statuses.includes(e.status));
+            }
+            if (opts?.createdAt) {
+                suites = suites.filter((e) => e.created_at === opts.createdAt);
+            }
+            if (opts?.createdAfter) {
+                suites = suites.filter((e) => e.created_at > opts.createdAfter);
+            }
+            if (opts?.createdBefore) {
+                suites = suites.filter((e) => e.created_at < opts.createdBefore);
+            }
+            const orderBy = opts?.orderBy ?? "created_at";
+            const orderDirection = opts?.orderDirection ?? "desc";
+            suites.sort((a, b) => {
+                const aVal = a[orderBy];
+                const bVal = b[orderBy];
+                const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                return orderDirection === "desc" ? -comparison : comparison;
+            });
+            if (opts?.limit) {
+                suites = suites.slice(0, opts.limit);
+            }
+            return suites;
+        },
+    };
+    evals = {
+        create: async (opts) => {
+            const _eval = {
+                id: this.nextEvalId++,
+                suite_id: opts.suiteId,
+                col_order: opts.order,
+                input: JSON.stringify(opts.input),
+                expected: JSON.stringify(opts.expected),
+                output: JSON.stringify(opts.output),
+                duration: opts.duration,
+                status: opts.status,
+                rendered_columns: JSON.stringify(opts.renderedColumns),
+                trial_index: opts.trialIndex,
+                created_at: new Date().toISOString(),
+            };
+            this.evalsStore.set(_eval.id, _eval);
+            return {
+                ..._eval,
+                input: opts.input,
+                expected: opts.expected,
+                output: opts.output,
+                rendered_columns: opts.renderedColumns,
+            };
+        },
+        update: async (opts) => {
+            const _eval = this.evalsStore.get(opts.id);
+            if (!_eval) {
+                throw new Error(`Result with id ${opts.id} not found`);
+            }
+            const updated = {
+                ..._eval,
+                ...(opts.input !== undefined && {
+                    input: JSON.stringify(opts.input),
+                }),
+                ...(opts.expected !== undefined && {
+                    expected: JSON.stringify(opts.expected),
+                }),
+                ...(opts.output !== undefined && {
+                    output: JSON.stringify(opts.output),
+                }),
+                ...(opts.duration !== undefined && { duration: opts.duration }),
+                ...(opts.status !== undefined && { status: opts.status }),
+                ...(opts.renderedColumns !== undefined && {
+                    rendered_columns: JSON.stringify(opts.renderedColumns),
+                }),
+                ...(opts.trialIndex !== undefined && { trial_index: opts.trialIndex }),
+            };
+            this.evalsStore.set(opts.id, updated);
+            return {
+                ...updated,
+                input: opts.input ?? JSON.parse(_eval.input),
+                expected: opts.expected ?? JSON.parse(_eval.expected),
+                output: opts.output ?? JSON.parse(_eval.output),
+                rendered_columns: opts.renderedColumns ?? JSON.parse(_eval.rendered_columns),
+            };
+        },
+        getMany: async (opts) => {
+            let evals = Array.from(this.evalsStore.values());
+            if (opts?.ids && opts.ids.length > 0) {
+                evals = evals.filter((e) => opts.ids.includes(e.id));
+            }
+            if (opts?.suiteIds && opts.suiteIds.length > 0) {
+                evals = evals.filter((e) => opts.suiteIds.includes(e.suite_id));
+            }
+            if (opts?.order !== undefined) {
+                evals = evals.filter((e) => e.col_order === opts.order);
+            }
+            if (opts?.statuses && opts.statuses.length > 0) {
+                evals = evals.filter((e) => opts.statuses.includes(e.status));
+            }
+            evals.sort((a, b) => a.col_order - b.col_order);
+            return evals.map((e) => ({
+                ...e,
+                input: JSON.parse(e.input),
+                expected: JSON.parse(e.expected),
+                output: JSON.parse(e.output),
+                rendered_columns: JSON.parse(e.rendered_columns),
+            }));
+        },
+    };
+    scores = {
+        create: async (opts) => {
+            const score = {
+                id: this.nextScoreId++,
+                eval_id: opts.evalId,
+                name: opts.name,
+                score: opts.score,
+                description: opts.description,
+                metadata: opts.metadata ? JSON.stringify(opts.metadata) : null,
+                created_at: new Date().toISOString(),
+            };
+            this.scoresStore.set(score.id, score);
+            return {
+                ...score,
+                metadata: opts.metadata ?? null,
+            };
+        },
+        getMany: async (opts) => {
+            let scores = Array.from(this.scoresStore.values());
+            if (opts?.ids && opts.ids.length > 0) {
+                scores = scores.filter((s) => opts.ids.includes(s.id));
+            }
+            if (opts?.evalIds && opts.evalIds.length > 0) {
+                scores = scores.filter((s) => opts.evalIds.includes(s.eval_id));
+            }
+            return scores.map((s) => ({
+                ...s,
+                metadata: s.metadata ? JSON.parse(s.metadata) : null,
+            }));
+        },
+    };
+    traces = {
+        create: async (opts) => {
+            const trace = {
+                id: this.nextTraceId++,
+                eval_id: opts.evalId,
+                input: JSON.stringify(opts.input),
+                output: JSON.stringify(opts.output),
+                start_time: opts.start,
+                end_time: opts.end,
+                input_tokens: opts.inputTokens ?? undefined,
+                output_tokens: opts.outputTokens ?? undefined,
+                total_tokens: opts.totalTokens ?? undefined,
+                col_order: opts.order,
+            };
+            this.tracesStore.set(trace.id, trace);
+            return {
+                ...trace,
+                input: opts.input,
+                output: opts.output,
+            };
+        },
+        getMany: async (opts) => {
+            let traces = Array.from(this.tracesStore.values());
+            if (opts?.ids && opts.ids.length > 0) {
+                traces = traces.filter((t) => opts.ids.includes(t.id));
+            }
+            if (opts?.evalIds && opts.evalIds.length > 0) {
+                traces = traces.filter((t) => opts.evalIds.includes(t.eval_id));
+            }
+            traces.sort((a, b) => a.col_order - b.col_order);
+            return traces.map((t) => ({
+                ...t,
+                input: JSON.parse(t.input),
+                output: JSON.parse(t.output),
+            }));
+        },
+    };
+    cache = {
+        get: async (keyHash) => {
+            const entry = this.cacheStore.get(keyHash);
+            if (!entry) {
+                return null;
+            }
+            // Clean up expired entries (older than 1 day)
+            const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+            if (entry.createdAt < oneDayAgo) {
+                this.cacheStore.delete(keyHash);
+                return null;
+            }
+            return {
+                value: entry.value,
+                duration: entry.duration,
+            };
+        },
+        set: async (keyHash, data) => {
+            this.cacheStore.set(keyHash, {
+                value: data.value,
+                duration: data.duration,
+                createdAt: Date.now(),
+            });
+        },
+        delete: async (keyHash) => {
+            this.cacheStore.delete(keyHash);
+        },
+        clear: async () => {
+            this.cacheStore.clear();
+        },
+    };
+    async close() {
+        // Nothing to close for in-memory
+    }
+    async [Symbol.asyncDispose]() {
+        await this.close();
+    }
+}
+/**
+ * Create a new in-memory storage
+ * @returns A new InMemoryStorage instance
+ */
+export const createInMemoryStorage = () => {
+    return InMemoryStorage.create();
+};
+//# sourceMappingURL=in-memory.js.map

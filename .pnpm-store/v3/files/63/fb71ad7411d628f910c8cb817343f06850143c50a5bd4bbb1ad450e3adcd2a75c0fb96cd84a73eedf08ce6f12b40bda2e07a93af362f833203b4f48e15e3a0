@@ -1,0 +1,1 @@
+{"version":3,"file":"answer-correctness.d.ts","sourceRoot":"","sources":["../../src/scorers/answer-correctness.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,aAAa,CAAC;AAkK3C;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GA6BG;AACH,wBAAsB,iBAAiB,CACrC,IAAI,EAAE,OAAO,CAAC,OAAO,CAAC,qBAAqB;;;;;GA8F5C"}

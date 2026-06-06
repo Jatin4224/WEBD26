@@ -1,0 +1,16 @@
+import fastify from "fastify";
+import type { Evalite } from "./types.js";
+export type Server = ReturnType<typeof createServer>;
+export declare const handleWebsockets: (server: fastify.FastifyInstance) => {
+    updateState: (newState: Evalite.ServerState) => void;
+    getState: () => Evalite.ServerState;
+};
+export declare const createServer: (opts: {
+    storage: Evalite.Storage;
+}) => {
+    updateState: (newState: Evalite.ServerState) => void;
+    start: (port: number) => void;
+    setRerunFn: (fn: () => Promise<void>) => void;
+    stop: () => Promise<undefined>;
+};
+//# sourceMappingURL=server.d.ts.map

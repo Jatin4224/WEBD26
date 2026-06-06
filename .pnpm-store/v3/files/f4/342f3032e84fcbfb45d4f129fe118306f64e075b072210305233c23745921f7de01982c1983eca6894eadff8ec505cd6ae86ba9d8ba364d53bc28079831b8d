@@ -1,0 +1,3 @@
+import { AsyncLocalStorage } from "async_hooks";
+export declare const writeFileQueueLocalStorage: AsyncLocalStorage<(path: string, buffer: Buffer) => void>;
+//# sourceMappingURL=write-file-queue-local-storage.d.ts.map

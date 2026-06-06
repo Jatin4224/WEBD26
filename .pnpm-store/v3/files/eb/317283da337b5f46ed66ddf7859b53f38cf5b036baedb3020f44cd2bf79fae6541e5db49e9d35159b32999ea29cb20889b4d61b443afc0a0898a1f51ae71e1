@@ -1,0 +1,82 @@
+import { Writable } from "stream";
+import type { Evalite } from "./types.js";
+declare module "vitest" {
+    interface ProvidedContext {
+        cwd: string;
+        /**
+         * Number of trials to run for each test case.
+         * Only primitives can be passed here - don't pass entire config as it contains
+         * non-serializable functions (like storage factory).
+         */
+        trialCount: number | undefined;
+        /**
+         * Port number where the evalite server is running.
+         * Used by cache and other features that need to communicate with the server.
+         */
+        serverPort: number;
+        /**
+         * Whether to log cache operations to the console.
+         */
+        cacheDebug: boolean;
+        /**
+         * Whether to enable cache for AI SDK model outputs.
+         */
+        cacheEnabled: boolean;
+    }
+}
+/**
+ * Run Evalite programmatically via the Node API.
+ *
+ * This is the official Node API for running evaluations programmatically.
+ * It provides full control over eval execution including path filtering,
+ * watch mode, score thresholds, and result exporting.
+ *
+ * @param opts - Configuration options for running evaluations
+ * @param opts.path - Optional path filter to run specific eval files (defaults to undefined, which runs all evals)
+ * @param opts.cwd - Working directory (defaults to process.cwd())
+ * @param opts.testOutputWritable - Optional writable stream for test output
+ * @param opts.mode - Execution mode: "watch-for-file-changes", "run-once-and-exit", "run-once-and-serve", or "run-once"
+ * @param opts.scoreThreshold - Optional score threshold (0-100) to fail the process if scores are below
+ * @param opts.outputPath - Optional path to write test results in JSON format after completion
+ *
+ * @example
+ * ```typescript
+ * import { runEvalite } from "evalite/runner";
+ *
+ * // Run once and exit - simplified usage
+ * await runEvalite({
+ *   mode: "run-once-and-exit",
+ *   scoreThreshold: 80,
+ *   outputPath: "./results.json"
+ * });
+ *
+ * // Watch mode for development
+ * await runEvalite({
+ *   mode: "watch-for-file-changes"
+ * });
+ *
+ * // Run specific eval file with custom working directory
+ * await runEvalite({
+ *   path: "tests/my-eval.eval.ts",
+ *   cwd: "/path/to/project",
+ *   mode: "run-once-and-exit"
+ * });
+ * ```
+ */
+export declare const runEvalite: (opts: {
+    path?: string | undefined;
+    cwd?: string | undefined;
+    testOutputWritable?: Writable;
+    mode: Evalite.RunMode;
+    scoreThreshold?: number;
+    outputPath?: string;
+    hideTable?: boolean;
+    storage?: Evalite.Storage;
+    configDebugMode?: boolean;
+    disableServer?: boolean;
+    cacheEnabled?: boolean;
+    cacheDebug?: boolean;
+}) => Promise<{
+    vitest: import("vitest/node").Vitest;
+}>;
+//# sourceMappingURL=run-evalite.d.ts.map

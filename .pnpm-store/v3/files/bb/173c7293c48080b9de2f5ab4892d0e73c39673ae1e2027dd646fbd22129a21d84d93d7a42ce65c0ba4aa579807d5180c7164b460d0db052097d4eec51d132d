@@ -1,0 +1,67 @@
+import { type LanguageModel } from "ai";
+import type { Evalite } from "../../types.js";
+/**
+ * JSON schema for generating statements from text
+ */
+export declare const StatementGeneratorOutputSchema: import("ai").Schema<{
+    statements: string[];
+}>;
+/**
+ * JSON schema for statement evaluation with verdicts and reasons
+ */
+export declare const FaithfulnessStatementsOutputSchema: import("ai").Schema<{
+    statements: Evalite.Scorers.FaithfulnessStatements;
+}>;
+/**
+ * JSON schema for simple statement evaluation (verdicts only, no reasons)
+ */
+export declare const SimpleVerdictOutputSchema: import("ai").Schema<{
+    verdicts: number[];
+}>;
+/**
+ * Prompt for generating statements from a question-answer pair
+ */
+export declare const generateStatementsPrompt: (values: Record<import("../prompt-builder.js").PromptBuilder.RequiredKeys<"Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement. Format the outputs in JSON.", readonly ["question", "answer"]>, unknown>) => string;
+/**
+ * Prompt for evaluating statements with detailed verdicts and reasons
+ */
+export declare const evaluateStatementsPrompt: (values: Record<import("../prompt-builder.js").PromptBuilder.RequiredKeys<"Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.", readonly ["context", "statements"]>, unknown>) => string;
+/**
+ * Prompt for simple NLI evaluation (verdicts only, no reasons)
+ */
+export declare const simpleNLIPrompt: (values: Record<import("../prompt-builder.js").PromptBuilder.RequiredKeys<"Your task is to judge whether each statement can be directly inferred from the given context. Return 1 if the statement is supported by the context, or 0 if it is not. Only return the array of verdicts.", readonly ["context", "statements"]>, unknown>) => string;
+/**
+ * Splits an answer into individual factual
+ * claims that can be checked separately.
+ *
+ * Example: "Einstein was a physicist who
+ * developed relativity" becomes:
+ * - "Einstein was a physicist"
+ * - "Einstein developed relativity"
+ *
+ * Also removes pronouns and replaces with actual
+ * names to make each claim standalone.
+ */
+export declare function decomposeIntoStatements(question: string, answer: string, model: LanguageModel): Promise<string[]>;
+/**
+ * Checks if each claim can be verified from the
+ * provided context.
+ *
+ * Returns both a verdict (supported or not) and
+ * an explanation for each claim.
+ *
+ * More detailed than the simple version but uses
+ * more AI tokens.
+ */
+export declare function evaluateStatementFaithfulness(context: string, statements: string[], model: LanguageModel): Promise<Evalite.Scorers.FaithfulnessStatements>;
+/**
+ * Checks if each claim can be verified from the
+ * provided context.
+ *
+ * Returns only verdicts (supported or not) with
+ * no explanations.
+ *
+ * Faster and cheaper than the detailed version.
+ */
+export declare function evaluateStatementsSimple(context: string, statements: string[], model: LanguageModel): Promise<number[]>;
+//# sourceMappingURL=statement-evaluation.d.ts.map

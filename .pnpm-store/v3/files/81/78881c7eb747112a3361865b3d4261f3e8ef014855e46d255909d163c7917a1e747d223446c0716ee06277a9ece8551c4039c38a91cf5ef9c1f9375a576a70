@@ -1,0 +1,13 @@
+import type { Evalite } from "../types.js";
+type Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
+export type JsonParseFields<T extends object, K extends keyof T> = Prettify<Omit<T, K> & Record<K, unknown>>;
+export declare const jsonParseFields: <T extends object, K extends keyof T>(obj: T, fields: K[]) => JsonParseFields<T, K>;
+export declare const jsonParseFieldsArray: <T extends object, K extends keyof T>(obj: T[], fields: K[]) => JsonParseFields<T, K>[];
+export declare const computeAverageScores: (scores: Evalite.Storage.Entities.Score[]) => Array<{
+    eval_id: number;
+    average: number;
+}>;
+export {};
+//# sourceMappingURL=utils.d.ts.map

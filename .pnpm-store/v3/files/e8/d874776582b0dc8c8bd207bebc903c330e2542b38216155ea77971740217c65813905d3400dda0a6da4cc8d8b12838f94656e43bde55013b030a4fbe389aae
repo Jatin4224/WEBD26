@@ -1,0 +1,14 @@
+import type { Evalite } from "./types.js";
+export declare const evalite: {
+    <TInput, TOutput, TExpected = undefined>(evalName: string, opts: Evalite.RunnerOpts<TInput, TOutput, TExpected>): import("vitest").SuiteCollector<object>;
+    skip<TInput, TOutput, TExpected = undefined>(evalName: string, opts: Evalite.RunnerOpts<TInput, TOutput, TExpected>): import("vitest").SuiteCollector<object>;
+    each<TVariant>(variants: Array<{
+        name: string;
+        input: TVariant;
+        only?: boolean;
+    }>): {
+        <TInput, TOutput, TExpected = undefined>(evalName: string, opts: Evalite.RunnerOpts<TInput, TOutput, TExpected, TVariant>): void;
+        skip<TInput, TOutput_1, TExpected_1 = undefined>(evalName: string, opts: Evalite.RunnerOpts<TInput, TOutput_1, TExpected_1, TVariant>): void;
+    };
+};
+//# sourceMappingURL=evalite.d.ts.map

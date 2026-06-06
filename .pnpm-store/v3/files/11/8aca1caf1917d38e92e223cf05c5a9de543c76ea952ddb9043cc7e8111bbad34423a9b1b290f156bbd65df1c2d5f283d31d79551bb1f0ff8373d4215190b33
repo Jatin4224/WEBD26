@@ -1,0 +1,13 @@
+{
+  "name": "ai-hero-cli",
+  "version": "0.2.14",
+  "type": "module",
+  "description": "The CLI used to run exercises for the AI Hero course",
+  "bin": "bin.cjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattpocock/ai-hero-cli"
+  },
+  "author": "Matt Pocock <team@aihero.dev> (https://aihero.dev)",
+  "license": "MIT"
+}

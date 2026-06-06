@@ -1,0 +1,22 @@
+import { AsyncLocalStorage } from "node:async_hooks";
+export type CacheContextConfig = {
+    trialCount: number | undefined;
+    evalName: string;
+    serverPort: number;
+};
+export interface CacheContext extends CacheContextConfig {
+    reportCacheHit: (hit: {
+        keyHash: string;
+        hit: boolean;
+        savedDuration: number;
+    }) => void;
+}
+export declare const cacheContextLocalStorage: AsyncLocalStorage<CacheContext>;
+export declare const getCacheContext: () => CacheContext | undefined;
+export declare const generateCacheKey: (params: {
+    model: unknown;
+    params: unknown;
+    callType: "generate" | "stream";
+    callParams: unknown;
+}) => string;
+//# sourceMappingURL=cache.d.ts.map

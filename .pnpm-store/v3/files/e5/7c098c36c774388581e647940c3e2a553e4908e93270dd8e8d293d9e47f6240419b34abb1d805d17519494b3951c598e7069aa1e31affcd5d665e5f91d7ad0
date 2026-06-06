@@ -1,0 +1,42 @@
+/**
+ * Internal utility for building prompts used by
+ * scorers.
+ *
+ * Most users won't need to use this directly -
+ * it's used internally by the built-in scorers
+ * to create consistent prompt formats.
+ */
+export declare namespace PromptBuilder {
+    /**
+     * Example with input and output for prompt building.
+     */
+    interface Example {
+        input: unknown;
+        output: unknown;
+    }
+    /**
+     * Extracts placeholder keys from a template string.
+     * E.g., "Hello {name}, you are {age}" => "name" | "age"
+     */
+    type ExtractPlaceholders<S extends string> = S extends `${infer _Start}{${infer Key}}${infer Rest}` ? Key | ExtractPlaceholders<Rest> : never;
+    /**
+     * Extracts keys from a readonly string array or returns never.
+     */
+    type TaskKeys<T extends readonly string[] | undefined> = T extends readonly string[] ? T[number] : never;
+    /**
+     * Combines placeholder keys and task keys.
+     */
+    type RequiredKeys<PromptT extends string, TaskT extends readonly string[] | undefined> = ExtractPlaceholders<PromptT> | TaskKeys<TaskT>;
+}
+/**
+ * Creates a type-safe prompt builder function that generates
+ * structured prompts with instructions, examples, and task
+ * sections in XML format. Interpolates placeholder values from
+ * templates and wraps content in corresponding XML tags.
+ */
+export declare function promptBuilder<PromptT extends string, const TaskT extends readonly string[] | undefined = undefined>(config: {
+    prompt: PromptT;
+    examples?: PromptBuilder.Example[];
+    task?: TaskT;
+}): (values: PromptBuilder.RequiredKeys<PromptT, TaskT> extends never ? Record<string, never> : Record<PromptBuilder.RequiredKeys<PromptT, TaskT>, unknown>) => string;
+//# sourceMappingURL=prompt-builder.d.ts.map

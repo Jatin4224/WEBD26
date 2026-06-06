@@ -1,0 +1,29 @@
+import type { Evalite } from "./types.js";
+/**
+ * Type-safe helper for defining Evalite configuration.
+ * Provides intellisense and type checking for config options.
+ *
+ * @example
+ * ```ts
+ * // evalite.config.ts
+ * import { defineConfig } from "evalite/config"
+ * import { createSqliteStorage } from "evalite/sqlite-storage"
+ *
+ * export default defineConfig({
+ *   storage: () => createSqliteStorage("./custom.db"),
+ *   server: { port: 3001 },
+ *   scoreThreshold: 80,
+ *   hideTable: true
+ * })
+ * ```
+ */
+export declare function defineConfig(config: Evalite.Config): Evalite.Config;
+/**
+ * Load Evalite configuration file from the specified directory.
+ * Looks for evalite.config.{ts,mts,js,mjs} files.
+ *
+ * @param cwd - Current working directory to search for config file
+ * @returns Resolved config object or undefined if no config found
+ */
+export declare function loadEvaliteConfig(cwd: string): Promise<Evalite.Config | undefined>;
+//# sourceMappingURL=config.d.ts.map

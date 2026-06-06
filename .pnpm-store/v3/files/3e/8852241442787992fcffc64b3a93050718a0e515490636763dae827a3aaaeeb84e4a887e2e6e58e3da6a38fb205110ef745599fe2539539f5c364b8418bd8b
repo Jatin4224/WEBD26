@@ -1,0 +1,261 @@
+var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
+    if (value !== null && value !== void 0) {
+        if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
+        var dispose, inner;
+        if (async) {
+            if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+            dispose = value[Symbol.asyncDispose];
+        }
+        if (dispose === void 0) {
+            if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+            dispose = value[Symbol.dispose];
+            if (async) inner = dispose;
+        }
+        if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
+        env.stack.push({ value: value, dispose: dispose, async: async });
+    }
+    else if (async) {
+        env.stack.push({ async: true });
+    }
+    return value;
+};
+var __disposeResources = (this && this.__disposeResources) || (function (SuppressedError) {
+    return function (env) {
+        function fail(e) {
+            env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+            env.hasError = true;
+        }
+        var r, s = 0;
+        function next() {
+            while (r = env.stack.pop()) {
+                try {
+                    if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                    if (r.dispose) {
+                        var result = r.dispose.call(r.value);
+                        if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    }
+                    else s |= 1;
+                }
+                catch (e) {
+                    fail(e);
+                }
+            }
+            if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
+            if (env.hasError) throw env.error;
+        }
+        return next();
+    };
+})(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+});
+import { buildInstallCommand, buildUninstallCommand, } from "@stricli/auto-complete";
+import { buildApplication, buildCommand, buildRouteMap } from "@stricli/core";
+import { createRequire } from "node:module";
+import { runEvalite } from "./run-evalite.js";
+import { exportCommand } from "./export-static.js";
+import { loadEvaliteConfig } from "./config.js";
+import { createInMemoryStorage } from "./storage/in-memory.js";
+const packageJson = createRequire(import.meta.url)("../package.json");
+const commonParameters = {
+    positional: {
+        kind: "tuple",
+        parameters: [{ parse: String, brief: "path", optional: true }],
+    },
+    flags: {
+        threshold: {
+            kind: "parsed",
+            parse: parseFloat,
+            brief: "Fails the process if the score is below threshold. Specified as 0-100. Default is 100.",
+            optional: true,
+        },
+        outputPath: {
+            kind: "parsed",
+            parse: String,
+            brief: "Path to write test results in JSON format after evaluation completes.",
+            optional: true,
+        },
+        hideTable: {
+            kind: "boolean",
+            brief: "Hides the detailed table output in the CLI.",
+            optional: true,
+        },
+        noCache: {
+            kind: "boolean",
+            brief: "Disables caching of AI SDK model outputs.",
+            optional: true,
+        },
+    },
+};
+export const createProgram = (commands) => {
+    const runOnce = buildCommand({
+        parameters: commonParameters,
+        func: async (flags, path) => {
+            return commands.runOnceAtPath({
+                path,
+                threshold: flags.threshold,
+                outputPath: flags.outputPath,
+                hideTable: flags.hideTable,
+                noCache: flags.noCache,
+            });
+        },
+        docs: {
+            brief: "Run evals once and exit",
+        },
+    });
+    const serve = buildCommand({
+        parameters: commonParameters,
+        func: (flags, path) => {
+            return commands.serve({
+                path,
+                threshold: flags.threshold,
+                outputPath: flags.outputPath,
+                hideTable: flags.hideTable,
+                noCache: flags.noCache,
+            });
+        },
+        docs: {
+            brief: "Run evals once and serve UI",
+        },
+    });
+    const watch = buildCommand({
+        parameters: commonParameters,
+        func: (flags, path) => {
+            if (flags.outputPath) {
+                throw new Error("--outputPath is not supported in watch mode. Use 'evalite --outputPath <path>' instead.");
+            }
+            return commands.watch({
+                path,
+                threshold: flags.threshold,
+                outputPath: flags.outputPath,
+                hideTable: flags.hideTable,
+                noCache: flags.noCache,
+            });
+        },
+        docs: {
+            brief: "Watch evals for file changes",
+        },
+    });
+    const exportCmd = buildCommand({
+        parameters: {
+            flags: {
+                output: {
+                    kind: "parsed",
+                    parse: String,
+                    brief: "Output directory for static export (default: ./evalite-export)",
+                    optional: true,
+                },
+                runId: {
+                    kind: "parsed",
+                    parse: parseInt,
+                    brief: "Specific run ID to export (default: latest)",
+                    optional: true,
+                },
+                basePath: {
+                    kind: "parsed",
+                    parse: String,
+                    brief: "Base path for hosting at non-root URLs (default: /). Must start with /",
+                    optional: true,
+                },
+            },
+        },
+        func: (flags) => {
+            return commands.export({
+                output: flags.output,
+                runId: flags.runId,
+                basePath: flags.basePath,
+            });
+        },
+        docs: {
+            brief: "Export static UI bundle for CI artifacts",
+        },
+    });
+    const routes = buildRouteMap({
+        routes: {
+            run: runOnce,
+            serve,
+            watch,
+            export: exportCmd,
+            install: buildInstallCommand("evalite", {
+                bash: "__evalite_bash_complete",
+            }),
+            uninstall: buildUninstallCommand("evalite", { bash: true }),
+        },
+        defaultCommand: "run",
+        docs: {
+            brief: "",
+            hideRoute: {
+                install: true,
+                uninstall: true,
+            },
+        },
+    });
+    return buildApplication(routes, {
+        name: packageJson.name,
+        versionInfo: {
+            currentVersion: packageJson.version,
+        },
+    });
+};
+export const program = createProgram({
+    watch: (path) => {
+        return runEvalite({
+            path: path.path,
+            scoreThreshold: path.threshold,
+            cwd: undefined,
+            mode: "watch-for-file-changes",
+            outputPath: path.outputPath,
+            hideTable: path.hideTable,
+            cacheEnabled: path.noCache ? false : undefined,
+        });
+    },
+    runOnceAtPath: (path) => {
+        return runEvalite({
+            path: path.path,
+            scoreThreshold: path.threshold,
+            cwd: undefined,
+            mode: "run-once-and-exit",
+            outputPath: path.outputPath,
+            cacheEnabled: path.noCache ? false : undefined,
+        });
+    },
+    serve: (path) => {
+        return runEvalite({
+            path: path.path,
+            scoreThreshold: path.threshold,
+            cwd: undefined,
+            mode: "run-once-and-serve",
+            outputPath: path.outputPath,
+            cacheEnabled: path.noCache ? false : undefined,
+        });
+    },
+    export: async (opts) => {
+        const env_1 = { stack: [], error: void 0, hasError: false };
+        try {
+            const cwd = process.cwd();
+            // Load config and determine storage (same logic as run-evalite.ts)
+            const config = await loadEvaliteConfig(cwd);
+            const storage = __addDisposableResource(env_1, config?.storage
+                ? await config.storage()
+                : createInMemoryStorage(), true);
+            await exportCommand({
+                cwd,
+                storage,
+                outputPath: opts.output ?? "./evalite-export",
+                runId: opts.runId,
+                basePath: opts.basePath,
+            });
+        }
+        catch (e_1) {
+            env_1.error = e_1;
+            env_1.hasError = true;
+        }
+        finally {
+            const result_1 = __disposeResources(env_1);
+            if (result_1)
+                await result_1;
+        }
+    },
+});
+//# sourceMappingURL=command.js.map

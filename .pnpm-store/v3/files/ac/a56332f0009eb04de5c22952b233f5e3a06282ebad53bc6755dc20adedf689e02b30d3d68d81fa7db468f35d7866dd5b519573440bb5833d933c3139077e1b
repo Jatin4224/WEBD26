@@ -1,0 +1,18 @@
+import { AsyncLocalStorage } from "node:async_hooks";
+import { createHash } from "node:crypto";
+export const cacheContextLocalStorage = new AsyncLocalStorage();
+export const getCacheContext = () => {
+    return cacheContextLocalStorage.getStore();
+};
+export const generateCacheKey = (params) => {
+    const context = getCacheContext();
+    const cacheObject = {
+        model: params.model,
+        params: params.params,
+        callType: params.callType,
+        callParams: params.callParams,
+        trialCount: context?.trialCount,
+    };
+    return createHash("sha256").update(JSON.stringify(cacheObject)).digest("hex");
+};
+//# sourceMappingURL=cache.js.map

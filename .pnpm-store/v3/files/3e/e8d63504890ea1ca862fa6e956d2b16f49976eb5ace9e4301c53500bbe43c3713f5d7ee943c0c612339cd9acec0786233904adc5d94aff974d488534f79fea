@@ -1,0 +1,11 @@
+import type { Evalite } from "../../types.js";
+/**
+ * Computes the F-beta score from TP/FP/FN
+ * classification counts. F-beta generalizes
+ * F1 score, allowing beta to weight precision
+ * vs recall. Beta > 1 favors recall, beta < 1
+ * favors precision. Returns a score between
+ * 0.0 and 1.0.
+ */
+export declare function computeFBetaScore(classification: Evalite.Scorers.AnswerCorrectnessClassification, beta: number): number;
+//# sourceMappingURL=scoring.d.ts.map

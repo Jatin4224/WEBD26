@@ -1,0 +1,20 @@
+type ProgramOpts = {
+    path: string | undefined;
+    threshold: number | undefined;
+    outputPath: string | undefined;
+    hideTable: boolean | undefined;
+    noCache: boolean | undefined;
+};
+export declare const createProgram: (commands: {
+    watch: (opts: ProgramOpts) => void;
+    runOnceAtPath: (opts: ProgramOpts) => void;
+    serve: (opts: ProgramOpts) => void;
+    export: (opts: {
+        output: string | undefined;
+        runId: number | undefined;
+        basePath: string | undefined;
+    }) => void;
+}) => import("@stricli/core").Application<import("@stricli/auto-complete").StricliAutoCompleteContext>;
+export declare const program: import("@stricli/core").Application<import("@stricli/auto-complete").StricliAutoCompleteContext>;
+export {};
+//# sourceMappingURL=command.d.ts.map

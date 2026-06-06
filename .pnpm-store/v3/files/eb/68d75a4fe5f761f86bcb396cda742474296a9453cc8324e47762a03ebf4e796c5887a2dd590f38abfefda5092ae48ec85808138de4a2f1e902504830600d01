@@ -1,0 +1,79 @@
+import type { RunnerTestFile } from "vitest";
+import type { Evalite } from "../types.js";
+import type { TestModule } from "vitest/node";
+export declare function withLabel(color: "red" | "green" | "blue" | "cyan", label: string, message: string): string;
+export declare const renderers: {
+    title: () => string;
+    description: (opts: {
+        isWatching: boolean;
+        port: number;
+    }) => string;
+};
+export declare function renderInitMessage(logger: {
+    log: (msg: string) => void;
+}, opts: {
+    isWatching: boolean;
+    port: number;
+}): void;
+export declare function renderWatcherStart(logger: {
+    log: (msg: string) => void;
+    error: (msg: string) => void;
+    printError: (err: unknown, options?: any) => void;
+    printUnhandledErrors: (errors: unknown[]) => void;
+}, opts: {
+    files: RunnerTestFile[];
+    errors: unknown[];
+    failedDueToThreshold: boolean;
+    scoreThreshold: number | undefined;
+}): void;
+export declare function renderErrorsSummary(logger: {
+    error: (msg: string) => void;
+    printError: (err: unknown, options?: any) => void;
+    printUnhandledErrors: (errors: unknown[]) => void;
+}, opts: {
+    testModules: readonly TestModule[];
+    errors: readonly unknown[];
+}): void;
+export declare function displayScore(_score: number | null): string;
+export declare function renderMaybeEvaliteFile(input: unknown): unknown;
+export declare function renderTable(logger: {
+    log: (msg: string) => void;
+}, rows: {
+    columns: {
+        label: string;
+        value: unknown;
+    }[];
+    score: number | null;
+    variant?: string;
+}[]): void;
+export declare function renderScoreDisplay(logger: {
+    log: (msg: string) => void;
+}, failedTasksCount: number, averageScore: number | null): void;
+export declare function renderThreshold(logger: {
+    log: (msg: string) => void;
+}, scoreThreshold: number, averageScore: number | null): "passed" | "failed";
+export declare function renderSummaryStats(logger: {
+    log: (msg: string) => void;
+}, data: {
+    totalFiles: number;
+    maxDuration: number;
+    totalEvals: number;
+}): void;
+export declare function renderDetailedTable(logger: {
+    log: (msg: string) => void;
+}, evals: Evalite.Eval[], failedCount: number): void;
+export declare function renderTask(opts: {
+    logger: {
+        log: (msg: string) => void;
+    };
+    eval: {
+        filePath: string;
+        status: Evalite.EvalStatus;
+        scores: Evalite.Score[];
+        numberOfEvals: number | string;
+    };
+}): void;
+export declare function renderServeModeFinalMessage(logger: {
+    log: (msg: string) => void;
+}, port: number): void;
+//# sourceMappingURL=rendering.d.ts.map

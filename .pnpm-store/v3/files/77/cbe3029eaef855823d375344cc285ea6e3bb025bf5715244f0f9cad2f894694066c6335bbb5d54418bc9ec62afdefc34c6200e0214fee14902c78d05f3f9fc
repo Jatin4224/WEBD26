@@ -1,0 +1,50 @@
+import type { Evalite } from "./types.js";
+export declare const getServerState: (fetchOpts?: {
+    signal?: AbortSignal;
+}) => Promise<Evalite.ServerState>;
+export type GetMenuItemsResultEval = Evalite.SDK.GetMenuItemsResultSuite;
+export type GetMenuItemsResult = Evalite.SDK.GetMenuItemsResult;
+export declare const getMenuItems: (fetchOpts?: {
+    signal?: AbortSignal;
+}) => Promise<GetMenuItemsResult>;
+export type GetSuiteByNameResult = {
+    history: {
+        score: number;
+        date: string;
+    }[];
+    suite: Evalite.Storage.Entities.Suite & {
+        evals: (Evalite.Storage.Entities.Eval & {
+            scores: Evalite.Storage.Entities.Score[];
+        })[];
+    };
+    prevSuite: (Evalite.Storage.Entities.Suite & {
+        evals: (Evalite.Storage.Entities.Eval & {
+            scores: Evalite.Storage.Entities.Score[];
+        })[];
+    }) | undefined;
+};
+export declare const getSuiteByName: (name: string, timestamp: string | null | undefined, fetchOpts?: {
+    signal?: AbortSignal;
+}) => Promise<GetSuiteByNameResult>;
+export type GetEvalResult = {
+    eval: Evalite.Storage.Entities.Eval & {
+        traces: Evalite.Storage.Entities.Trace[];
+        score: number;
+        scores: Evalite.Storage.Entities.Score[];
+    };
+    prevEval: (Evalite.Storage.Entities.Eval & {
+        score: number;
+        scores: Evalite.Storage.Entities.Score[];
+    }) | undefined;
+    suite: Evalite.Storage.Entities.Suite;
+};
+export declare const getEval: (opts: {
+    suiteName: string;
+    suiteTimestamp: string | null | undefined;
+    evalIndex: string;
+}, fetchOpts?: {
+    signal?: AbortSignal;
+}) => Promise<GetEvalResult>;
+export declare const serveFile: (filepath: string) => string;
+export declare const downloadFile: (filepath: string) => string;
+//# sourceMappingURL=sdk.d.ts.map

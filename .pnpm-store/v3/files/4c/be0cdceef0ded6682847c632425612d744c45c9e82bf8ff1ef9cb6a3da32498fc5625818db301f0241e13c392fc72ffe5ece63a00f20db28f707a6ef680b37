@@ -1,0 +1,10 @@
+import { AsyncLocalStorage } from "async_hooks";
+export const reportTraceLocalStorage = new AsyncLocalStorage();
+export const reportTrace = (trace) => {
+    const _reportTrace = reportTraceLocalStorage.getStore();
+    if (!_reportTrace) {
+        throw new Error("An error occurred: reportTrace must be called inside an evalite eval");
+    }
+    _reportTrace(trace);
+};
+//# sourceMappingURL=traces.js.map

@@ -1,0 +1,37 @@
+import type { Evalite } from "../types.js";
+import type { ReporterEvent } from "./events.js";
+export interface EvaliteRunnerOptions {
+    storage: Evalite.Storage;
+    logNewState: (event: Evalite.ServerState) => void;
+    modifyExitCode: (exitCode: number) => void;
+    scoreThreshold: number | undefined;
+}
+export declare class EvaliteRunner {
+    private opts;
+    private state;
+    private didLastRunFailThreshold;
+    private collectedResults;
+    private eventQueue;
+    constructor(opts: EvaliteRunnerOptions);
+    getState(): Evalite.ServerState;
+    getDidLastRunFailThreshold(): "yes" | "no" | "unknown";
+    getAllScores(): Evalite.Score[];
+    getSuccessfulResults(): Evalite.Eval[];
+    getScoresForModule(moduleId: string): Evalite.Score[];
+    handleTestSummary(data: {
+        failedTasksCount: number;
+        averageScore: number | null;
+    }): void;
+    updateState(state: Evalite.ServerState): void;
+    reportInvalidStateOccurred(event: ReporterEvent): void;
+    /**
+     * Wait for all queued events to complete processing
+     */
+    waitForCompletion(): Promise<void>;
+    /**
+     * Handles the state management for the reporter
+     */
+    sendEvent(event: ReporterEvent): void;
+    private processEvent;
+}
+//# sourceMappingURL=EvaliteRunner.d.ts.map

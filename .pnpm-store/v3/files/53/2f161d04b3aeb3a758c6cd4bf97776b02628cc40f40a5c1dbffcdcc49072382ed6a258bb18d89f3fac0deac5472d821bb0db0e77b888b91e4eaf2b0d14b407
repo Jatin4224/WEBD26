@@ -1,0 +1,59 @@
+import type { Evalite } from "../types.js";
+export declare class SqliteStorage implements Evalite.Storage {
+    private db;
+    private constructor();
+    private createSuite;
+    private createRun;
+    private insertEval;
+    private updateEval;
+    private insertScore;
+    private insertTrace;
+    private updateSuiteStatus;
+    /**
+     * Create a new SQLite storage
+     */
+    static create(location: string): SqliteStorage;
+    runs: {
+        create: (opts: Evalite.Storage.Runs.CreateOpts) => Promise<Evalite.Storage.Entities.Run>;
+        getMany: (opts?: Evalite.Storage.Runs.GetManyOpts) => Promise<Evalite.Storage.Entities.Run[]>;
+    };
+    suites: {
+        create: (opts: Evalite.Storage.Suites.CreateOpts) => Promise<Evalite.Storage.Entities.Suite>;
+        update: (opts: Evalite.Storage.Suites.UpdateOpts) => Promise<Evalite.Storage.Entities.Suite>;
+        getMany: (opts?: Evalite.Storage.Suites.GetManyOpts) => Promise<Evalite.Storage.Entities.Suite[]>;
+    };
+    evals: {
+        create: (opts: Evalite.Storage.Evals.CreateOpts) => Promise<Evalite.Storage.Entities.Eval>;
+        update: (opts: Evalite.Storage.Evals.UpdateOpts) => Promise<Evalite.Storage.Entities.Eval>;
+        getMany: (opts?: Evalite.Storage.Evals.GetManyOpts) => Promise<Evalite.Storage.Entities.Eval[]>;
+    };
+    scores: {
+        create: (opts: Evalite.Storage.Scores.CreateOpts) => Promise<Evalite.Storage.Entities.Score>;
+        getMany: (opts?: Evalite.Storage.Scores.GetManyOpts) => Promise<Evalite.Storage.Entities.Score[]>;
+    };
+    traces: {
+        create: (opts: Evalite.Storage.Traces.CreateOpts) => Promise<Evalite.Storage.Entities.Trace>;
+        getMany: (opts?: Evalite.Storage.Traces.GetManyOpts) => Promise<Evalite.Storage.Entities.Trace[]>;
+    };
+    cache: {
+        get: (keyHash: string) => Promise<{
+            value: unknown;
+            duration: number;
+        } | null>;
+        set: (keyHash: string, data: {
+            value: unknown;
+            duration: number;
+        }) => Promise<void>;
+        delete: (keyHash: string) => Promise<void>;
+        clear: () => Promise<void>;
+    };
+    close(): Promise<void>;
+    [Symbol.asyncDispose](): Promise<void>;
+}
+/**
+ * Create a new SQLite storage
+ * @param dbLocation - Path to the SQLite database file
+ * @returns A new SqliteStorage instance
+ */
+export declare const createSqliteStorage: (dbLocation: string) => Promise<SqliteStorage>;
+//# sourceMappingURL=sqlite.d.ts.map

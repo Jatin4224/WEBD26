@@ -1,0 +1,1 @@
+{"version":3,"file":"ai-sdk.d.ts","sourceRoot":"","sources":["../src/ai-sdk.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EACV,eAAe,EAGhB,MAAM,kBAAkB,CAAC;AAsF1B,eAAO,MAAM,cAAc,UAClB,eAAe,YACZ;IAAE,OAAO,CAAC,EAAE,OAAO,CAAC;IAAC,OAAO,CAAC,EAAE,OAAO,CAAA;CAAE,KACjD,eAmSF,CAAC"}

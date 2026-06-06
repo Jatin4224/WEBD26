@@ -1,0 +1,1 @@
+{"version":3,"file":"create-scorer.d.ts","sourceRoot":"","sources":["../src/create-scorer.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,YAAY,CAAC;AAE1C,eAAO,MAAM,YAAY,GAAI,MAAM,EAAE,OAAO,EAAE,SAAS,QAC/C,OAAO,CAAC,UAAU,CAAC,MAAM,EAAE,OAAO,EAAE,SAAS,CAAC,KACnD,OAAO,CAAC,MAAM,CAAC,MAAM,EAAE,OAAO,EAAE,SAAS,CA8B3C,CAAC"}

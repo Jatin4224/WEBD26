@@ -1,0 +1,2 @@
+export const DEFAULT_SERVER_PORT = 3006;
+//# sourceMappingURL=constants.js.map

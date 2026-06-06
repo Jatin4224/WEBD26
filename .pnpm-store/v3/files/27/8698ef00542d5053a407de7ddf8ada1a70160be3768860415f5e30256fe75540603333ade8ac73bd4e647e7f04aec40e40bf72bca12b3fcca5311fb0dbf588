@@ -1,0 +1,70 @@
+import type { Evalite } from "../types.js";
+/**
+ * Checks if your AI's output exactly matches the
+ * expected text character-for-character.
+ *
+ * Returns 1 if they match, 0 otherwise.
+ *
+ * **When to use**: For testing structured outputs
+ * like JSON, code, or specific phrases that must
+ * be exact.
+ *
+ * **When NOT to use**: When slight variations in
+ * wording are acceptable (use answerSimilarity
+ * instead).
+ *
+ * @param opts.actual - The actual output to check
+ * @param opts.expected - The exact string that output should match
+ */
+export declare function exactMatch(opts: Evalite.Scorers.ExactMatchOpts): Promise<{
+    name: string;
+    description: string;
+    score: number;
+}>;
+/**
+ * Checks if your AI's output contains the
+ * expected substring anywhere in the text.
+ *
+ * Returns 1 if found, 0 otherwise.
+ *
+ * **When to use**: To verify specific keywords or
+ * phrases appear in the response, regardless of
+ * surrounding text.
+ *
+ * **When NOT to use**: When you need exact matches
+ * (use exactMatch) or semantic similarity (use
+ * answerSimilarity).
+ *
+ * @param opts.actual - The actual output to check
+ * @param opts.expected - Substring that should appear anywhere in output
+ */
+export declare function contains(opts: Evalite.Scorers.ContainsOpts): Promise<{
+    name: string;
+    description: string;
+    score: number;
+}>;
+/**
+ * Measures string similarity using Levenshtein distance
+ * (edit distance), normalized to a 0-1 score.
+ *
+ * Returns a score from 0 to 1, where 1 means identical
+ * strings and 0 means completely different.
+ *
+ * **When to use**: For fuzzy string matching when you
+ * want to tolerate small typos, spelling variations,
+ * or minor differences. Useful for testing outputs
+ * that should be close but not necessarily exact.
+ *
+ * **When NOT to use**: When exact matches are required
+ * (use exactMatch) or when you need semantic similarity
+ * that understands meaning (use answerSimilarity).
+ *
+ * @param opts.actual - The actual output to check
+ * @param opts.expected - The expected string to compare against
+ */
+export declare function levenshtein(opts: Evalite.Scorers.LevenshteinOpts): Promise<{
+    name: string;
+    description: string;
+    score: number;
+}>;
+//# sourceMappingURL=string.d.ts.map

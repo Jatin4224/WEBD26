@@ -1,0 +1,37 @@
+import type { RunnerTestFile, TestAnnotation, UserConsoleLog } from "vitest";
+import type { Reporter, SerializedError, TestCase, TestModule, Vitest } from "vitest/node";
+import type { Evalite } from "./types.js";
+export interface EvaliteReporterOptions {
+    isWatching: boolean;
+    port: number;
+    logNewState: (event: Evalite.ServerState) => void;
+    storage: Evalite.Storage;
+    scoreThreshold: number | undefined;
+    modifyExitCode: (exitCode: number) => void;
+    mode: Evalite.RunMode;
+    hideTable?: boolean;
+}
+export default class EvaliteReporter implements Reporter {
+    private opts;
+    private runner;
+    private ctx;
+    private start;
+    constructor(opts: EvaliteReporterOptions);
+    onInit(ctx: Vitest): void;
+    onWatcherStart(files?: RunnerTestFile[], errors?: unknown[]): void;
+    private shouldLog;
+    private getFullName;
+    onUserConsoleLog(log: UserConsoleLog, taskState?: "passed" | "failed" | "skipped" | "pending"): void;
+    onWatcherRerun(files: string[]): void;
+    onTestRunEnd: (testModules: ReadonlyArray<TestModule>, unhandledErrors: ReadonlyArray<SerializedError>) => Promise<void>;
+    private customTestSummary;
+    onTestSuiteReady(): void;
+    onTestSuiteResult(): void;
+    onTestCaseAnnotate(testCase: TestCase, annotation: TestAnnotation): void;
+    onTestModuleCollected(mod: TestModule): void;
+    onTestModuleStart(mod: TestModule): void;
+    onTestCaseResult(test: TestCase): void;
+    protected printAnnotations(_test: TestCase, _console: "log" | "error", _padding?: number): void;
+    onTestModuleEnd(mod: TestModule): void;
+}
+//# sourceMappingURL=reporter.d.ts.map

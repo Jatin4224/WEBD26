@@ -1,0 +1,51 @@
+import { SpanExporter, ReadableSpan } from '@opentelemetry/sdk-trace-base';
+import { Langfuse, LangfuseOptions } from 'langfuse';
+import { ExportResult } from '@opentelemetry/core';
+
+type LangfuseExporterParams = {
+    publicKey?: string;
+    secretKey?: string;
+    baseUrl?: string;
+    debug?: boolean;
+} & LangfuseOptions;
+declare class LangfuseExporter implements SpanExporter {
+    static langfuse: Langfuse | null;
+    private readonly debug;
+    private readonly langfuse;
+    constructor(params?: LangfuseExporterParams);
+    export(allSpans: ReadableSpan[], resultCallback: (result: ExportResult) => void): Promise<void>;
+    private processTraceSpans;
+    private processSpanAsLangfuseSpan;
+    private processSpanAsLangfuseGeneration;
+    private parseUsageDetails;
+    private parseSpanMetadata;
+    private isGenerationSpan;
+    private isAiSdkSpan;
+    /**
+     * Checks if a given span is the root AI SDK span in a trace.
+     * The root AI span is the span that has no parent span or its parent span is not part of the AI SDK.
+     *
+     * @param span - The span to check.
+     * @param spans - The list of all spans in the trace.
+     * @returns A boolean indicating whether the span is the root AI SDK span.
+     */
+    private isRootAiSdkSpan;
+    private logDebug;
+    private getParentSpanId;
+    private hrTimeToDate;
+    forceFlush(): Promise<void>;
+    shutdown(): Promise<void>;
+    private parseInput;
+    private parseOutput;
+    private parseTraceId;
+    private parseTraceName;
+    private parseUserIdTraceAttribute;
+    private parseSessionIdTraceAttribute;
+    private parseLangfusePromptTraceAttribute;
+    private parseLangfuseUpdateParentTraceAttribute;
+    private parseTagsTraceAttribute;
+    private parseMetadataTraceAttribute;
+    private filterTraceAttributes;
+}
+
+export { LangfuseExporter };
