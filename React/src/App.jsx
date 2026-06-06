@@ -39,6 +39,8 @@ import UchihaFormBuilder from "./components/ObitoForm";
 import GuidedFormBuilder from "./components/ObitoForm";
 import SenseiSelection from "./components/SenseiSelection";
 import FrameCharacter from "./components/Button";
+import CohortChronicles from "./components/CohortChronicles";
+import MangaGridForm from "./components/MangaForm";
 
 const App = () => {
   return (
@@ -73,13 +75,15 @@ const App = () => {
         <House /> */}
         {/* <CodeSnippetLogin /> */}
         {/* <RaccoonAssistant /> */}
-        {/* <ObitoAssistant />
-        <ObitoChatInterface />
-        <ObitoFormBuilder /> */}
+        {/* <ObitoAssistant /> */}
+        {/* <ObitoChatInterface /> */}
+        {/* <ObitoFormBuilder /> */}
         {/* <RaccoonChat /> */}
         {/* <GuidedFormBuilder /> */}
         {/* <SenseiSelection /> */}
-        <FrameCharacter />
+        {/* <FrameCharacter /> */}
+        {/* <CohortChronicles /> */}
+        <MangaGridForm />
       </div>
     </>
   );
