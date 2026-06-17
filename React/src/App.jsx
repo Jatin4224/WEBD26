@@ -41,6 +41,8 @@ import SenseiSelection from "./components/SenseiSelection";
 import FrameCharacter from "./components/Button";
 import CohortChronicles from "./components/CohortChronicles";
 import MangaGridForm from "./components/MangaForm";
+import TheObeysLanding from "./components/Obeys";
+import SanRitaProjects from "./components/Sanrita";
 
 const App = () => {
   return (
@@ -83,7 +85,9 @@ const App = () => {
         {/* <SenseiSelection /> */}
         {/* <FrameCharacter /> */}
         {/* <CohortChronicles /> */}
-        <MangaGridForm />
+        {/* <MangaGridForm /> */}
+        {/* <TheObeysLanding /> */}
+        <SanRitaProjects />
       </div>
     </>
   );
