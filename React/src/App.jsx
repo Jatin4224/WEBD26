@@ -81,13 +81,13 @@ const App = () => {
         {/* <ObitoChatInterface /> */}
         {/* <ObitoFormBuilder /> */}
         {/* <RaccoonChat /> */}
-        {/* <GuidedFormBuilder /> */}
+        <GuidedFormBuilder />
         {/* <SenseiSelection /> */}
         {/* <FrameCharacter /> */}
-        {/* <CohortChronicles /> */}
-        {/* <MangaGridForm /> */}
+        {/* <CohortChronicles />
+        <MangaGridForm /> */}
         {/* <TheObeysLanding /> */}
-        <SanRitaProjects />
+        {/* <SanRitaProjects /> */}
       </div>
     </>
   );

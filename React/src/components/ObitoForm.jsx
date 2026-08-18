@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 
 // Replace these with your actual local imports for the avatar and full-body poses
 import obitoAvatar from "../assets/obitoAI.png";
-import obitoAngry from "../assets/angry.png";
-import obitoCurious from "../assets/curious.png";
+import obitoAngry from "../assets/harsh-angry.png";
+import obitoCurious from "../assets/harsh-curious.png";
 import obitoConfident from "../assets/confident.png";
 
 // Link your full-body expression assets here:
 const ASSETS = {
   avatar: obitoAvatar,
-  fullConfident: obitoConfident,
+  fullConfident: obitoCurious,
   fullThinking: obitoCurious,
   fullSerious: obitoAngry,
   fullHappy: obitoConfident, // Add a happy asset if you have one!
